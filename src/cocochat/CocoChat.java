@@ -9,13 +9,15 @@ package cocochat;
  *
  * @author Jesús Martínez
  */
-public class CocoChat {
+public class CocoChat 
+{
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        // TODO code application logic here
+    public static void main(String[] args) 
+    {
+        Sign_in signin = new Sign_in();
     }
     
 }
