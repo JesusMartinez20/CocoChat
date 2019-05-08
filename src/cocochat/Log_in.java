@@ -34,6 +34,7 @@ public class Log_in extends JFrame implements ActionListener{
     JPasswordField passwordText = new JPasswordField(20);
     JButton loginButton = new JButton("Iniciar sesión");
     JButton registerButton = new JButton("Registrarme");
+    private int retries;
   
     PrintStream os;
     public Log_in(Socket clientSocket,PrintStream os) {
@@ -43,6 +44,7 @@ public class Log_in extends JFrame implements ActionListener{
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(null);
         this.getContentPane().setBackground(Color.pink); 
+        retries = 0;
         
         Elementos();
     
@@ -70,19 +72,25 @@ public class Log_in extends JFrame implements ActionListener{
         registerButton.setBounds(500, 260, 110, 35);
         this.add(registerButton);
         registerButton.addActionListener(this);
-
     }
 
     @Override
     public void actionPerformed(ActionEvent ae) {
         if(ae.getSource()==loginButton){
-            try {
+            try 
+            {
                 os.print("login "+this.userName.getText()+" "+new String(this.passwordText.getPassword()));
                 while(clientSocket.getInputStream().available()==0);
-                if(clientSocket.getInputStream().read()=='0')
-                    JOptionPane.showMessageDialog(this, "Revisa tu usuario y contraseña");
-                    
-                    } catch (IOException ex) {
+                    if(clientSocket.getInputStream().read()=='0')
+                    {
+                        JOptionPane.showMessageDialog(this, "Revisa tu usuario y contraseña");
+                    }
+                    retries++;
+                    if(retries == 3)
+                    {
+                        new Sign_in(clientSocket,os).setVisible(true);  
+                    }
+            } catch (IOException ex) {
                 Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
             }
                 
