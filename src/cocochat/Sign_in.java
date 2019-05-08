@@ -8,6 +8,9 @@ package cocochat;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.PrintStream;
+import java.net.Socket;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -29,12 +32,16 @@ public class Sign_in extends JFrame implements ActionListener{
    JTextField Tpc=new JTextField();
    JButton signIn=new JButton();
    JOptionPane pop = new JOptionPane();
+   Socket clientSocket;
+   PrintStream os;
    
    int x=300;
    int y=105;
     
-    public Sign_in()
+    public Sign_in(Socket clientSocket,PrintStream os)
     {
+        this.clientSocket=clientSocket;
+        this.os=os;
         Start();
     }
     
@@ -42,9 +49,8 @@ public class Sign_in extends JFrame implements ActionListener{
     {
 
         this.setLayout(null);
-        this.setVisible(true);
         this.setSize(900, 900);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.getContentPane().setBackground(Color.pink);  
         this.add(Tu);
         this.add(userName);

@@ -3,6 +3,12 @@ package cocochat;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,17 +27,18 @@ import javax.swing.JTextField;
  * @author Jessica
  */
 public class Log_in extends JFrame implements ActionListener{
-
+    Socket clientSocket;
     JLabel userLabel = new JLabel("Usuario");
     JTextField userName = new JTextField(20);
     JLabel passwordLabel = new JLabel("Contraseña");
     JPasswordField passwordText = new JPasswordField(20);
     JButton loginButton = new JButton("Iniciar sesión");
     JButton registerButton = new JButton("Registrarme");
-
-    public Log_in() {
-        
-        this.setVisible(true); 
+  
+    PrintStream os;
+    public Log_in(Socket clientSocket,PrintStream os) {
+        this.clientSocket=clientSocket;
+        this.os=os;
         this.setSize(900, 900);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(null);
@@ -68,15 +75,21 @@ public class Log_in extends JFrame implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent ae) {
-        if(!checkUser(userName.getText())){
-            JOptionPane.showMessageDialog(null, "El usuario no existe");
-        }
-        else if(!checkPassword(userName.getText(),passwordText.getText())){
-            JOptionPane.showMessageDialog(null, "Contraseña incorrecta");
-        }
-        else
-        {
-            //Insert en la bd
+        if(ae.getSource()==loginButton){
+            try {
+                os.print("login "+this.userName.getText()+" "+new String(this.passwordText.getPassword()));
+                while(clientSocket.getInputStream().available()==0);
+                if(clientSocket.getInputStream().read()=='0')
+                    JOptionPane.showMessageDialog(this, "Revisa tu usuario y contraseña");
+                    
+                    } catch (IOException ex) {
+                Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                
+                
+        }else
+        if(ae.getSource()==registerButton){
+            new Sign_in(clientSocket,os).setVisible(true);
         }
     }
     
