@@ -9,6 +9,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.PrintStream;
+import java.net.Socket;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -41,6 +43,8 @@ public class Chat extends JFrame{
    JButton [] groupsButtons=initButtons(nGroups);
    JButton [] onlineButtons=initButtons(nOnline);
    JButton [] offlineButtons=initButtons(nOffline);
+   Socket clientSocket = null;
+   PrintStream os = null;
    
    JScrollPane scrollChat = new JScrollPane();
    JScrollPane scrollSide = new JScrollPane();
@@ -49,8 +53,10 @@ public class Chat extends JFrame{
    
    int y=0;
     
-    Chat(){
-        //this.setSize(900, 900);
+    Chat(Socket clientSocket,PrintStream os){
+        this.clientSocket = clientSocket;
+        this.os = os;
+        //thissetSize(900, 900);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(null);
         this.getContentPane().setBackground(Color.pink);  

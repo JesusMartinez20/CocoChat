@@ -84,8 +84,13 @@ public class Log_in extends JFrame implements ActionListener{
                     if(clientSocket.getInputStream().read()=='0')
                     {
                         JOptionPane.showMessageDialog(this, "Revisa tu usuario y contraseña");
+                        retries++;
                     }
-                    retries++;
+                    else
+                    {
+                        new Chat(clientSocket, os).setVisible(true);
+                        this.setVisible(false);
+                    }
                     if(retries == 3)
                     {
                         new Sign_in(clientSocket,os).setVisible(true);  
