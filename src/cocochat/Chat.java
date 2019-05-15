@@ -9,8 +9,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -52,10 +55,19 @@ public class Chat extends JFrame{
    JList list = new JList();
    
    int y=0;
+   String user="jesus";
+   byte [] friendsList;
+   byte [] groupsList;
+   byte [] messages;
+   byte [] requestList;
     
     Chat(Socket clientSocket,PrintStream os){
         this.clientSocket = clientSocket;
         this.os = os;
+        friendsList();
+        groupsList();
+        messages();
+        requestList();
         this.setPreferredSize(new Dimension(900,900));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(null);
@@ -155,4 +167,52 @@ public class Chat extends JFrame{
         return botones;
     }
     
-}
+    
+    public void friendsList(){
+            try 
+            {
+                os.print("friends");
+                while(clientSocket.getInputStream().available()==0);
+                   this.friendsList=new byte[clientSocket.getInputStream().available()];
+            } catch (IOException ex) {
+                Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
+    
+    public void messages(){
+            try 
+            {
+                os.print("friends");
+                while(clientSocket.getInputStream().available()==0);
+                   this.messages=new byte[clientSocket.getInputStream().available()];
+            } catch (IOException ex) {
+                Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
+    
+    public void groupsList(){
+            try 
+            {
+                os.print("friends");
+                while(clientSocket.getInputStream().available()==0);
+                   this.groupsList=new byte[clientSocket.getInputStream().available()];
+            } catch (IOException ex) {
+                Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
+    
+    public void requestList(){
+            try 
+            {
+                os.print("friends");
+                while(clientSocket.getInputStream().available()==0);
+                   this.requestList=new byte[clientSocket.getInputStream().available()];
+            } catch (IOException ex) {
+                Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
+
+    
+ }
+    
+    
