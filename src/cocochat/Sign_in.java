@@ -9,8 +9,11 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -85,26 +88,31 @@ public class Sign_in extends JFrame implements ActionListener{
     
    @Override
     public void actionPerformed(ActionEvent e) {
-       
-        if(!checkUser(userName.getText())){
-            JOptionPane.showMessageDialog(null, "El usuario ya existe");
-        }
-        else if(!checkPassword(password1.getText(),password2.getText())){
+        if(!checkPassword(password1.getPassword(),password2.getPassword())){
             JOptionPane.showMessageDialog(null, "Las contraseñas no coinciden");
         }
         else
         {
-            //Insert en la bd
+           try 
+            {
+                os.print("signIn "+this.userName.getText()+" "+new String(this.password1.getPassword()));
+                while(clientSocket.getInputStream().available()==0);
+                    if(clientSocket.getInputStream().read()=='0')
+                    {
+                        JOptionPane.showMessageDialog(this, "Revisa tu usuario y contraseña");
+                    }
+                    else
+                    {
+                        new Chat(clientSocket, os).setVisible(true);
+                        this.setVisible(false);
+                    }
+            } catch (IOException ex) {
+                Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
-    boolean checkPassword(String pass1,String pass2){
-       return pass1.equals(pass2);
+    boolean checkPassword(char[] pass1,char[] pass2){
+       return new String(pass1).equals(new String(pass2));
     }
-    
-    //Se checará en la BD si el usuario ya existe
-    boolean checkUser(String user){
-        return true;
-    }
-    
 }

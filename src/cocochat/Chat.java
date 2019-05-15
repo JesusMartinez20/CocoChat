@@ -56,7 +56,7 @@ public class Chat extends JFrame{
     Chat(Socket clientSocket,PrintStream os){
         this.clientSocket = clientSocket;
         this.os = os;
-        //thissetSize(900, 900);
+        this.setPreferredSize(new Dimension(900,900));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(null);
         this.getContentPane().setBackground(Color.pink);  
