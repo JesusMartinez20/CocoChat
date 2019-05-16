@@ -35,6 +35,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 /**
@@ -43,7 +44,7 @@ import org.xml.sax.InputSource;
  */
 public class Chat extends JFrame{
    int nFriends=2, nGroups=2, nOnline=2, nOffline=2;
-   
+
    JLabel header=new JLabel();
    JTextField description=new JTextField();
    JTextField friends=new JTextField();
@@ -52,7 +53,7 @@ public class Chat extends JFrame{
    JTextField offline=new JTextField();
    JTextField chatPanel=new JTextField();
    JTextField message=new JTextField();
-   
+
    JButton send=new JButton("Enviar");
    JButton requests=new JButton("Solicitudes");
    JButton [] friendsButtons=initButtons(nFriends);
@@ -61,19 +62,19 @@ public class Chat extends JFrame{
    JButton [] offlineButtons=initButtons(nOffline);
    Socket clientSocket = null;
    PrintStream os = null;
-   
+
    JScrollPane scrollChat = new JScrollPane();
    JScrollPane scrollSide = new JScrollPane();
-   
+
    JList list = new JList();
-   
+
    int y=0;
    String user="jesus";
    ArrayList<Amigo> friendsList = new ArrayList<>();
    byte [] groupsList;
    byte [] messages;
    byte [] requestList;
-    
+
     Chat(Socket clientSocket,PrintStream os){
         this.clientSocket = clientSocket;
         this.os = os;
@@ -84,7 +85,7 @@ public class Chat extends JFrame{
         this.setPreferredSize(new Dimension(900,900));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(null);
-        this.getContentPane().setBackground(Color.pink);  
+        this.getContentPane().setBackground(Color.pink);
         requests.setSize(200,50);
         header.setText("CocoChat");
         description.setText("chat");
@@ -112,10 +113,10 @@ public class Chat extends JFrame{
         scrollSide.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scrollChat.setViewportView(chatPanel);
         scrollChat.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        
-        
+
+
         GroupLayout view= new GroupLayout(this.getContentPane());
-               
+
         view.setHorizontalGroup(
                 view.createParallelGroup()
                     .addComponent(header,700,700,700)
@@ -129,10 +130,10 @@ public class Chat extends JFrame{
                                             .addComponent(send,100,100,100)
                                     )
                             )
-                            
+
                     )
         );
-        
+
         view.setVerticalGroup(
                 view.createSequentialGroup()
                     .addComponent(header,100,100,100)
@@ -146,46 +147,46 @@ public class Chat extends JFrame{
                                             .addComponent(send,50,50,50)
                                     )
                             )
-                            
+
                     )
         );
-        
+
         this.setLayout(view);
         this.pack();
         view.setAutoCreateContainerGaps(true);
         view.setAutoCreateGaps(true);
     }
-    
+
    public void initSide(JTextField label, JButton[] buttons){
         y+=50;
         label.setBounds(0,y,200, 50);
         list.add(label);
-        
+
         for ( int i = 0; i < buttons.length; i++ ) {
             y+=50;
             buttons[i].setBounds(0, y, 200, 50);
                 list.add(buttons[i]);
-              
+
         }
     }
-    
+
     public JButton[] initButtons(int n){
         JButton [] botones = new JButton[n];
-        for (int i = 0; i < n; i++) 
+        for (int i = 0; i < n; i++)
         {
                 botones[i] = new JButton("hola");
-              
+
         }
         return botones;
     }
-    
-    
+
+
     public void friendsList(){
             byte[] bytes;
             String command="";
             String[] splitted;
             Document doc = null;
-            try 
+            try
             {
                 os.print("friends");
                 while(!command.contains("</amigos>")){
@@ -194,28 +195,34 @@ public class Chat extends JFrame{
                    clientSocket.getInputStream().read(bytes);
                    command+= new String(bytes);
                 }
-                System.out.println(command); 
-                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder builder = null;
-                try
-                {
-                    builder = factory.newDocumentBuilder();
-                    doc = builder.parse(new InputSource(new StringReader(command)));
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-                System.out.println("se detectó fin de etiqueta");
+                System.out.println(command);
                 doc = convertStringToXMLDocument(command);
-                System.out.println(doc.getFirstChild().getFirstChild().getNodeName());
+                NodeList amigos=doc.getFirstChild().getChildNodes();
+                for (int i = 0; i < amigos.getLength(); i++) {
+                    Amigo amigo = new Amigo();
+                    NodeList amigoNode = amigos.item(i).getChildNodes();
+                    amigo.id=Integer.parseInt(amigoNode.item(0).getTextContent());
+                    amigo.alias=amigoNode.item(1).getTextContent();
+                    NodeList mensajes = amigoNode.item(2).getChildNodes();
+                    for (int e = 0; e < mensajes.getLength(); e++) {
+                        Mensaje mensaje = new Mensaje();
+                        NodeList mensajeNode= mensajes.item(e).getChildNodes();
+                        mensaje.origen=Integer.parseInt(mensajeNode.item(0).getTextContent());
+                        mensaje.texto=mensajeNode.item(1).getTextContent();
+                        mensaje.tiempo=mensajeNode.item(2).getTextContent();
+                        amigo.mensajes.add(mensaje);
+                        System.out.println(mensaje.origen);
+                        System.out.println(mensaje.texto);
+                    }
+                    friendsList.add(amigo);
+                }
             } catch (IOException ex) {
                 Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
             }
     }
-    
+
     public void messages(){
-            try 
+            try
             {
                 os.print("friends");
                 while(clientSocket.getInputStream().available()==0);
@@ -224,9 +231,9 @@ public class Chat extends JFrame{
                 Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
             }
     }
-    
+
     public void groupsList(){
-            try 
+            try
             {
                 os.print("friends");
                 while(clientSocket.getInputStream().available()==0);
@@ -235,9 +242,9 @@ public class Chat extends JFrame{
                 Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
             }
     }
-    
+
     public void requestList(){
-            try 
+            try
             {
                 os.print("friends");
                 while(clientSocket.getInputStream().available()==0);
@@ -251,14 +258,14 @@ public class Chat extends JFrame{
     {
         //Parser that produces DOM object trees from XML content
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-         
+
         //API to obtain DOM Document instance
         DocumentBuilder builder = null;
         try
         {
             //Create DocumentBuilder with default configuration
             builder = factory.newDocumentBuilder();
-             
+
             //Parse the content to Document object
             Document doc = builder.parse(new InputSource(new StringReader(xmlString)));
             return doc;
@@ -270,5 +277,3 @@ public class Chat extends JFrame{
         return null;
     }
  }
-    
-    
