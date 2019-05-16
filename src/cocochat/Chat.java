@@ -29,6 +29,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 /**
@@ -190,7 +191,25 @@ public class Chat extends JFrame{
                 }
                 System.out.println("se detectó fin de etiqueta");
                 Document doc = convertStringToXMLDocument(command);
-                System.out.println(doc.getFirstChild().getFirstChild().getNodeName());
+                NodeList amigos=doc.getFirstChild().getChildNodes();
+                for (int i = 0; i < amigos.getLength(); i++) {
+                    Amigo amigo = new Amigo();
+                    NodeList amigoNode = amigos.item(i).getChildNodes();
+                    amigo.id=Integer.parseInt(amigoNode.item(0).getTextContent());
+                    amigo.alias=amigoNode.item(1).getTextContent();
+                    NodeList mensajes = amigoNode.item(2).getChildNodes();
+                    for (int e = 0; e < mensajes.getLength(); e++) {
+                        Mensaje mensaje = new Mensaje();
+                        NodeList mensajeNode= mensajes.item(e).getChildNodes();
+                        mensaje.origen=Integer.parseInt(mensajeNode.item(0).getTextContent());
+                        mensaje.texto=mensajeNode.item(1).getTextContent();
+                        mensaje.tiempo=mensajeNode.item(2).getTextContent();
+                        amigo.mensajes.add(mensaje);
+                        System.out.println(mensaje.origen);
+                        System.out.println(mensaje.texto);
+                    }
+                    friendsList.add(amigo);
+                }
             } catch (IOException ex) {
                 Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
             }
