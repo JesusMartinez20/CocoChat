@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.StringReader;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -25,6 +26,10 @@ import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 
 /**
  *
@@ -184,6 +189,8 @@ public class Chat extends JFrame{
                    System.out.println(command);
                 }
                 System.out.println("se detectó fin de etiqueta");
+                Document doc = convertStringToXMLDocument(command);
+                System.out.println(doc.getFirstChild().getFirstChild().getNodeName());
             } catch (IOException ex) {
                 Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -222,7 +229,28 @@ public class Chat extends JFrame{
             }
     }
 
-    
+    private static Document convertStringToXMLDocument(String xmlString)
+    {
+        //Parser that produces DOM object trees from XML content
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+         
+        //API to obtain DOM Document instance
+        DocumentBuilder builder = null;
+        try
+        {
+            //Create DocumentBuilder with default configuration
+            builder = factory.newDocumentBuilder();
+             
+            //Parse the content to Document object
+            Document doc = builder.parse(new InputSource(new StringReader(xmlString)));
+            return doc;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
  }
     
     
