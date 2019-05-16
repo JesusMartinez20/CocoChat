@@ -175,11 +175,13 @@ public class Chat extends JFrame{
             try 
             {
                 os.print("friends");
+                while(true){
                 while(clientSocket.getInputStream().available()==0);
                    bytes=new byte[clientSocket.getInputStream().available()];
                    clientSocket.getInputStream().read(bytes);
                    command= new String(bytes);
                    System.out.println(command);
+                }
             } catch (IOException ex) {
                 Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
             }
