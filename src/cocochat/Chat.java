@@ -43,7 +43,6 @@ import org.xml.sax.InputSource;
  * @author Jesús Martínez
  */
 public class Chat extends JFrame{
-   int nFriends=2, nGroups=2, nOnline=2, nOffline=2;
 
    JLabel header=new JLabel();
    JTextField description=new JTextField();
@@ -56,10 +55,10 @@ public class Chat extends JFrame{
 
    JButton send=new JButton("Enviar");
    JButton requests=new JButton("Solicitudes");
-   JButton [] friendsButtons=initButtons(nFriends);
-   JButton [] groupsButtons=initButtons(nGroups);
-   JButton [] onlineButtons=initButtons(nOnline);
-   JButton [] offlineButtons=initButtons(nOffline);
+   JButton [] friendsButtons;
+   //JButton [] groupsButtons=initButtons(2);
+   //JButton [] onlineButtons=initButtons(2);
+   //JButton [] offlineButtons=initButtons(2);
    Socket clientSocket = null;
    PrintStream os = null;
 
@@ -82,6 +81,7 @@ public class Chat extends JFrame{
       //  groupsList();
         //messages();
         //requestList();
+        friendsButtons = initButtons(friendsList);
         this.setPreferredSize(new Dimension(900,900));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(null);
@@ -103,9 +103,9 @@ public class Chat extends JFrame{
         scrollChat.setViewportView(chatPanel);
         scrollSide.setViewportView(list);
         initSide(friends,friendsButtons);
-        initSide(groups,groupsButtons);
-        initSide(online,onlineButtons);
-        initSide(offline,offlineButtons);
+        //initSide(groups,groupsButtons);
+        //initSide(online,onlineButtons);
+        //initSide(offline,offlineButtons);
         y+=50;
         list.add(requests);
         list.setPreferredSize(new Dimension(300,1000));
@@ -170,12 +170,12 @@ public class Chat extends JFrame{
         }
     }
 
-    public JButton[] initButtons(int n){
-        JButton [] botones = new JButton[n];
-        for (int i = 0; i < n; i++)
+    public JButton[] initButtons(ArrayList<Amigo> friendsList){
+        String text;
+        JButton [] botones = new JButton[friendsList.size()];
+        for (int i = 0; i < friendsList.size(); i++) 
         {
-                botones[i] = new JButton("hola");
-
+            botones[i] = new JButton( friendsList.get(i).alias);
         }
         return botones;
     }
