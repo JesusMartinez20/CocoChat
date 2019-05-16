@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.GroupLayout;
@@ -57,7 +58,7 @@ public class Chat extends JFrame{
    
    int y=0;
    String user="jesus";
-   byte [] friendsList;
+   ArrayList<Amigo> friendsList = new ArrayList<>();
    byte [] groupsList;
    byte [] messages;
    byte [] requestList;
