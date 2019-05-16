@@ -114,7 +114,10 @@ public class Chat extends JFrame implements ActionListener, Runnable{
         scrollSide.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scrollChat.setViewportView(chatPanel);
         scrollChat.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-
+        send.addActionListener((ActionEvent e) ->
+            {
+                sendNudes();
+            });
 
         GroupLayout view= new GroupLayout(this.getContentPane());
 
@@ -158,6 +161,19 @@ public class Chat extends JFrame implements ActionListener, Runnable{
         view.setAutoCreateGaps(true);
     }
 
+    public void sendNudes()
+    {
+        if(last == 1)
+        {
+            os.print("mensaje<s>amigo<s>"+friendsList.get(friend).id+"<s>"+message.getText());
+            message.setText("");
+        }
+        /*else
+        {
+            os.print("mensaje<s>grupo<s>"+groupsList.get(friend).id+"<s>Mensaje de relleno jajajaja");
+        }*/
+    }
+    
    public void initSide(JTextField label, JButton[] buttons){
         y+=50;
         label.setBounds(0,y,200, 50);
