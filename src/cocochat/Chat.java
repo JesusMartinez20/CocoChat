@@ -182,6 +182,20 @@ public class Chat extends JFrame implements ActionListener{
         }
         return botones;
     }
+    public JButton[] initButtons0(ArrayList<Grupo> friendsList){
+        JButton [] botones = new JButton[friendsList.size()];
+        for (int i = 0; i < friendsList.size(); i++)
+        {
+            final int id = i;
+            botones[i] = new JButton( friendsList.get(i).nombre);
+            botones[i].addActionListener((ActionEvent e) ->
+            {
+                showMensajesAmigo(id);
+            });
+
+        }
+        return botones;
+    }
 
     public void showMensajesAmigo(int id)
     {
