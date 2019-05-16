@@ -203,7 +203,7 @@ public class Chat extends JFrame implements ActionListener{
         Amigo amigo = friendsList.get(id);
         for(int i = 0; i < amigo.mensajes.size(); i++)
         {
-            if(amigo.mensajes.get(i).origen == 0)
+            if(amigo.mensajes.get(i).origen.equals("0"))
             {
                 chatPanel.setText(chatPanel.getText()+"\nYo:\n");
             }
@@ -237,7 +237,7 @@ public class Chat extends JFrame implements ActionListener{
         Grupo grupo = groupsList.get(id);
         for(int i = 0; i < grupo.mensajes.size(); i++)
         {
-            if(grupo.mensajes.get(i).origen == 0)
+            if(grupo.mensajes.get(i).origen.equals("0"))
             {
                 chatPanel.setText(chatPanel.getText()+"\nYo:\n");
             }
@@ -275,7 +275,7 @@ public class Chat extends JFrame implements ActionListener{
                     for (int e = 0; e < mensajes.getLength(); e++) {
                         Mensaje mensaje = new Mensaje();
                         NodeList mensajeNode= mensajes.item(e).getChildNodes();
-                        mensaje.origen=Integer.parseInt(mensajeNode.item(0).getTextContent());
+                        mensaje.origen=(mensajeNode.item(0).getTextContent());
                         mensaje.texto=mensajeNode.item(1).getTextContent();
                         mensaje.tiempo=mensajeNode.item(2).getTextContent();
                         amigo.mensajes.add(mensaje);
@@ -314,7 +314,7 @@ public class Chat extends JFrame implements ActionListener{
                     for (int e = 0; e < mensajes.getLength(); e++) {
                         Mensaje mensaje = new Mensaje();
                         NodeList mensajeNode= mensajes.item(e).getChildNodes();
-                        mensaje.origen=Integer.parseInt(mensajeNode.item(0).getTextContent());
+                        mensaje.origen=(mensajeNode.item(0).getTextContent());
                         mensaje.texto=mensajeNode.item(1).getTextContent();
                         mensaje.tiempo=mensajeNode.item(2).getTextContent();
                         grupo.mensajes.add(mensaje);
