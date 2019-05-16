@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
@@ -31,7 +32,7 @@ import javax.swing.ScrollPaneConstants;
 public class Chat extends JFrame{
    int nFriends=2, nGroups=2, nOnline=2, nOffline=2;
    
-   JTextField header=new JTextField();
+   JLabel header=new JLabel();
    JTextField description=new JTextField();
    JTextField friends=new JTextField();
    JTextField groups=new JTextField();
@@ -74,7 +75,6 @@ public class Chat extends JFrame{
         this.getContentPane().setBackground(Color.pink);  
         requests.setSize(200,50);
         header.setText("CocoChat");
-        header.setEditable(false);
         description.setText("chat");
         description.setEditable(false);
         friends.setText("Amigos");
@@ -169,11 +169,17 @@ public class Chat extends JFrame{
     
     
     public void friendsList(){
+            byte[] bytes;
+            String command;
+            String[] splitted;
             try 
             {
                 os.print("friends");
                 while(clientSocket.getInputStream().available()==0);
-                   this.friendsList=new byte[clientSocket.getInputStream().available()];
+                   bytes=new byte[clientSocket.getInputStream().available()];
+                   clientSocket.getInputStream().read(bytes);
+                   command= new String(bytes);
+                   System.out.println(command);
             } catch (IOException ex) {
                 Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
             }

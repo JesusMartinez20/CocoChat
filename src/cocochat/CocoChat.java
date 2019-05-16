@@ -24,7 +24,7 @@ public class CocoChat
      * @param args the command line arguments
      */
     static String server="127.0.0.1";
-    static int port=5000;
+    static int port=5501;
     public static void main(String[] args) 
     {   
         try {
