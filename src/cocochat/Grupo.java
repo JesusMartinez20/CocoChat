@@ -1,0 +1,28 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package cocochat;
+
+import java.util.ArrayList;
+
+/**
+ *
+ * @author lucas
+ */
+public class Grupo {
+    int id;
+    String nombre;
+    ArrayList<Mensaje> mensajes;
+
+    public Grupo(int id, String nombre) {
+        this.id = id;
+        this.nombre = nombre;
+        this.mensajes=new ArrayList<>();
+    }
+
+    public Grupo() {
+        this.mensajes = new ArrayList<>();
+    }  
+}

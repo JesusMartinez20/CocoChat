@@ -40,12 +40,12 @@ import org.xml.sax.InputSource;
 public class Chat extends JFrame implements ActionListener{
    int nFriends=2, nGroups=2, nOnline=2, nOffline=2;
    int destination;
-   
+
    ArrayList<Amigo> friendsList = new ArrayList<>();
-   ArrayList<Amigo> groupsList = new ArrayList<>();
+   ArrayList<Grupo> groupsList = new ArrayList<>();
    ArrayList<Amigo> onlineList = new ArrayList<>();
    ArrayList<Amigo> offlineList = new ArrayList<>();
-   
+
    JLabel header=new JLabel();
    JTextField description=new JTextField();
    JTextField friends=new JTextField();
@@ -57,8 +57,8 @@ public class Chat extends JFrame implements ActionListener{
 
    JButton send=new JButton("Enviar");
    JButton requests=new JButton("Solicitudes");
-   
-   
+
+
    Socket clientSocket = null;
    PrintStream os = null;
 
@@ -68,19 +68,18 @@ public class Chat extends JFrame implements ActionListener{
    JList list = new JList();
 
    int y=0;
-   
-  
-    
+
+
+
     Chat(Socket clientSocket,PrintStream os) {
         this.clientSocket = clientSocket;
         this.os = os;
         friendsList();
+        groupsList();
         JButton [] friendsButtons=initButtons(this.friendsList);
-        JButton [] groupsButtons=initButtons(this.groupsList);
+        JButton [] groupsButtons=initButtons0(this.groupsList);
     JButton [] onlineButtons=initButtons(this.onlineList);
         JButton [] offlineButtons=initButtons(this.offlineList);
-      //  groupsList();
-        //messages();
         //requestList();
         this.setPreferredSize(new Dimension(900,900));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -168,22 +167,22 @@ public class Chat extends JFrame implements ActionListener{
 
         }
     }
-    
+
     public JButton[] initButtons(ArrayList<Amigo> friendsList){
         JButton [] botones = new JButton[friendsList.size()];
-        for (int i = 0; i < friendsList.size(); i++) 
+        for (int i = 0; i < friendsList.size(); i++)
         {
             final int id = i;
             botones[i] = new JButton( friendsList.get(i).alias);
-            botones[i].addActionListener((ActionEvent e) -> 
+            botones[i].addActionListener((ActionEvent e) ->
             {
                 showMensajesAmigo(id);
             });
-              
+
         }
         return botones;
     }
-    
+
     public void showMensajesAmigo(int id)
     {
         Amigo amigo = friendsList.get(id);
@@ -240,23 +239,40 @@ public class Chat extends JFrame implements ActionListener{
             }
     }
 
-    public void messages(){
-            try
-            {
-                os.print("friends");
-                while(clientSocket.getInputStream().available()==0);
-                   //this.messages=new byte[clientSocket.getInputStream().available()];
-            } catch (IOException ex) {
-                Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
-            }
-    }
-
     public void groupsList(){
+            byte[] bytes;
+            String command="";
+            String[] splitted;
+            Document doc = null;
             try
             {
-                os.print("friends");
+                os.print("groups");
+                while(!command.contains("</grupos>")){
                 while(clientSocket.getInputStream().available()==0);
-                   //this.groupsList=new byte[clientSocket.getInputStream().available()];
+                   bytes=new byte[clientSocket.getInputStream().available()];
+                   clientSocket.getInputStream().read(bytes);
+                   command+= new String(bytes);
+                    System.out.println(command);
+                }
+                System.out.println(command);
+                doc = convertStringToXMLDocument(command);
+                NodeList grupos=doc.getFirstChild().getChildNodes();
+                for (int i = 0; i < grupos.getLength(); i++) {
+                    Grupo grupo = new Grupo();
+                    NodeList grupoNode = grupos.item(i).getChildNodes();
+                    grupo.id=Integer.parseInt(grupoNode.item(0).getTextContent());
+                    grupo.nombre=grupoNode.item(1).getTextContent();
+                    NodeList mensajes = grupoNode.item(2).getChildNodes();
+                    for (int e = 0; e < mensajes.getLength(); e++) {
+                        Mensaje mensaje = new Mensaje();
+                        NodeList mensajeNode= mensajes.item(e).getChildNodes();
+                        mensaje.origen=Integer.parseInt(mensajeNode.item(0).getTextContent());
+                        mensaje.texto=mensajeNode.item(1).getTextContent();
+                        mensaje.tiempo=mensajeNode.item(2).getTextContent();
+                        grupo.mensajes.add(mensaje);
+                    }
+                    groupsList.add(grupo);
+                }
             } catch (IOException ex) {
                 Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -272,16 +288,16 @@ public class Chat extends JFrame implements ActionListener{
                 Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
             }
     }
-    
+
     @Override
     public void actionPerformed(ActionEvent e){
         if(e.getSource()==send){
            sendMessage();
         }
     }
-    
+
     public void sendMessage(){
-        try 
+        try
             {
                 os.print("message"+"<s>"+this.message.getText()+"<s>"+this.destination);
                 while(clientSocket.getInputStream().available()==0);
