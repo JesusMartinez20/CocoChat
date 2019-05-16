@@ -199,6 +199,7 @@ public class Chat extends JFrame implements ActionListener{
 
     public void showMensajesAmigo(int id)
     {
+        chatPanel.setText("");
         Amigo amigo = friendsList.get(id);
         for(int i = 0; i < amigo.mensajes.size(); i++)
         {
@@ -232,6 +233,7 @@ public class Chat extends JFrame implements ActionListener{
     
     public void showMensajesGrupo(int id)
     {
+        chatPanel.setText("");
         Grupo grupo = groupsList.get(id);
         for(int i = 0; i < grupo.mensajes.size(); i++)
         {
