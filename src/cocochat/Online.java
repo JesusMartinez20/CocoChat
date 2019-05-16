@@ -11,5 +11,10 @@ package cocochat;
  * @author Jesús Martínez
  */
 public class Online {
-    
+  String name;
+  int id;
+  
+  Online(){
+      
+  }
 }

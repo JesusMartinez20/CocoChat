@@ -10,5 +10,10 @@ package cocochat;
  * @author Jesús Martínez
  */
 public class Offline {
+    String name;
+    int id;
     
+    Offline(){
+        
+    }
 }
