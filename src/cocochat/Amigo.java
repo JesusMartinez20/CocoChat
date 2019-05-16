@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author lucas
+ * @author lghhs
  */
 public class Amigo {
     int id;
@@ -24,7 +24,5 @@ public class Amigo {
 
     public Amigo() {
         this.mensajes = new ArrayList<>();
-    }
-    
-    
+    }  
 }

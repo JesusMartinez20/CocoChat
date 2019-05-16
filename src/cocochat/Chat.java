@@ -5,6 +5,7 @@
  */
 package cocochat;
 
+import com.sun.org.apache.xerces.internal.parsers.DOMParser;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -17,14 +18,19 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.GroupLayout;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import java.io.StringReader;
 import javax.swing.ScrollPaneConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -179,6 +185,7 @@ public class Chat extends JFrame{
             byte[] bytes;
             String command="";
             String[] splitted;
+            Document doc = null;
             try 
             {
                 os.print("friends");
@@ -187,8 +194,20 @@ public class Chat extends JFrame{
                    bytes=new byte[clientSocket.getInputStream().available()];
                    clientSocket.getInputStream().read(bytes);
                    command+= new String(bytes);
-                   System.out.println(command);
                 }
+                System.out.println(command); 
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder builder = null;
+                try
+                {
+                    builder = factory.newDocumentBuilder();
+                    doc = builder.parse(new InputSource(new StringReader(command)));
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+                System.out.println(doc.getFirstChild().getFirstChild().getFirstChild().getNodeValue());
                 System.out.println("se detectó fin de etiqueta");
                 Document doc = convertStringToXMLDocument(command);
                 NodeList amigos=doc.getFirstChild().getChildNodes();
