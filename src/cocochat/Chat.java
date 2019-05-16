@@ -41,7 +41,7 @@ public class Chat extends JFrame implements ActionListener{
    int destination;
    
    ArrayList<Amigo> friendsList = new ArrayList<>();
-   ArrayList<Amigo> groupsList = new ArrayList<>();
+   ArrayList<Grupo> groupsList = new ArrayList<>();
    ArrayList<Amigo> onlineList = new ArrayList<>();
    ArrayList<Amigo> offlineList = new ArrayList<>();
    
@@ -74,12 +74,11 @@ public class Chat extends JFrame implements ActionListener{
         this.clientSocket = clientSocket;
         this.os = os;
         friendsList();
+        groupsList();
         JButton [] friendsButtons=initButtons(this.friendsList);
-        JButton [] groupsButtons=initButtons(this.groupsList);
+        JButton [] groupsButtons=initButtons0(this.groupsList);
     JButton [] onlineButtons=initButtons(this.onlineList);
         JButton [] offlineButtons=initButtons(this.offlineList);
-      //  groupsList();
-        //messages();
         //requestList();
         this.setPreferredSize(new Dimension(900,900));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -179,6 +178,16 @@ public class Chat extends JFrame implements ActionListener{
         }
         return botones;
     }
+    public JButton[] initButtons0(ArrayList<Grupo> GroupList){
+        JButton [] botones = new JButton[GroupList.size()];
+        for (int i = 0; i < GroupList.size(); i++) 
+        {
+            botones[i] = new JButton( GroupList.get(i).nombre);
+            botones[i].addActionListener(this);
+              
+        }
+        return botones;
+    }
 
 
     public void friendsList(){
@@ -218,23 +227,40 @@ public class Chat extends JFrame implements ActionListener{
             }
     }
 
-    public void messages(){
-            try
-            {
-                os.print("friends");
-                while(clientSocket.getInputStream().available()==0);
-                   //this.messages=new byte[clientSocket.getInputStream().available()];
-            } catch (IOException ex) {
-                Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
-            }
-    }
-
     public void groupsList(){
+            byte[] bytes;
+            String command="";
+            String[] splitted;
+            Document doc = null;
             try
             {
-                os.print("friends");
+                os.print("groups");
+                while(!command.contains("</grupos>")){
                 while(clientSocket.getInputStream().available()==0);
-                   //this.groupsList=new byte[clientSocket.getInputStream().available()];
+                   bytes=new byte[clientSocket.getInputStream().available()];
+                   clientSocket.getInputStream().read(bytes);
+                   command+= new String(bytes);
+                    System.out.println(command);
+                }
+                System.out.println(command);
+                doc = convertStringToXMLDocument(command);
+                NodeList grupos=doc.getFirstChild().getChildNodes();
+                for (int i = 0; i < grupos.getLength(); i++) {
+                    Grupo grupo = new Grupo();
+                    NodeList grupoNode = grupos.item(i).getChildNodes();
+                    grupo.id=Integer.parseInt(grupoNode.item(0).getTextContent());
+                    grupo.nombre=grupoNode.item(1).getTextContent();
+                    NodeList mensajes = grupoNode.item(2).getChildNodes();
+                    for (int e = 0; e < mensajes.getLength(); e++) {
+                        Mensaje mensaje = new Mensaje();
+                        NodeList mensajeNode= mensajes.item(e).getChildNodes();
+                        mensaje.origen=Integer.parseInt(mensajeNode.item(0).getTextContent());
+                        mensaje.texto=mensajeNode.item(1).getTextContent();
+                        mensaje.tiempo=mensajeNode.item(2).getTextContent();
+                        grupo.mensajes.add(mensaje);
+                    }
+                    groupsList.add(grupo);
+                }
             } catch (IOException ex) {
                 Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
             }
