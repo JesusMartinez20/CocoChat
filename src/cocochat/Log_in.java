@@ -89,7 +89,7 @@ public class Log_in extends JFrame implements ActionListener{
                     else
                     {
                         new Chat(clientSocket, os).setVisible(true);
-                        this.setVisible(false);
+                        this.dispose();
                     }
                     if(retries == 3)
                     {
@@ -103,6 +103,7 @@ public class Log_in extends JFrame implements ActionListener{
         }else
         if(ae.getSource()==registerButton){
             new Sign_in(clientSocket,os).setVisible(true);
+            this.dispose();
         }
     }
     

@@ -95,17 +95,24 @@ public class Sign_in extends JFrame implements ActionListener{
         {
            try 
             {
-                os.print("signIn "+this.userName.getText()+" "+new String(this.password1.getPassword()));
-                while(clientSocket.getInputStream().available()==0);
+                if(userName.getText().contains(" "))
+                {
+                    JOptionPane.showMessageDialog(this, "El nombre de usuario no puede contener espacios");
+                }
+                else
+                {
+                    os.print("signIn "+this.userName.getText()+" "+new String(this.password1.getPassword()));
+                    while(clientSocket.getInputStream().available()==0);
                     if(clientSocket.getInputStream().read()=='0')
                     {
-                        JOptionPane.showMessageDialog(this, "Revisa tu usuario y contraseña");
+                        JOptionPane.showMessageDialog(this, "El nickname ya está en uso");
                     }
                     else
                     {
                         new Chat(clientSocket, os).setVisible(true);
                         this.setVisible(false);
                     }
+                }
             } catch (IOException ex) {
                 Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
             }
