@@ -37,7 +37,9 @@ import org.xml.sax.InputSource;
  *
  * @author Jesús Martínez
  */
-public class Chat extends JFrame implements ActionListener{
+public class Chat extends JFrame implements ActionListener, Runnable{
+
+
    int nFriends=2, nGroups=2, nOnline=2, nOffline=2;
    int destination;
 
@@ -54,6 +56,7 @@ public class Chat extends JFrame implements ActionListener{
    JTextField offline=new JTextField();
    JTextPane chatPanel=new JTextPane();
    JTextField message=new JTextField();
+   int last = 0,friend = 0, group = 0;
 
    JButton send=new JButton("Enviar");
    JButton requests=new JButton("Solicitudes");
@@ -214,6 +217,8 @@ public class Chat extends JFrame implements ActionListener{
             chatPanel.setText(chatPanel.getText()+amigo.mensajes.get(i).texto+"\n");
             chatPanel.setText(chatPanel.getText()+amigo.mensajes.get(i).tiempo+"\n");
         }
+        last = 1;
+        friend = id;
     }
 
     public JButton[] initButtonsGroups(ArrayList<Grupo> groupsList){
@@ -248,6 +253,8 @@ public class Chat extends JFrame implements ActionListener{
             chatPanel.setText(chatPanel.getText()+grupo.mensajes.get(i).texto+"\n");
             chatPanel.setText(chatPanel.getText()+grupo.mensajes.get(i).tiempo+"\n");
         }
+        last = 2;
+        friend = id;
     }
 
     public void friendsList(){
@@ -376,5 +383,10 @@ public class Chat extends JFrame implements ActionListener{
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public void run() {
+        
     }
  }
