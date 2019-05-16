@@ -170,7 +170,6 @@ public class Chat extends JFrame implements ActionListener{
     }
     
     public JButton[] initButtons(ArrayList<Amigo> friendsList){
-        friendsList.forEach((n)-> System.out.println(n));
         JButton [] botones = new JButton[friendsList.size()];
         for (int i = 0; i < friendsList.size(); i++) 
         {
@@ -196,7 +195,6 @@ public class Chat extends JFrame implements ActionListener{
                    clientSocket.getInputStream().read(bytes);
                    command+= new String(bytes);
                 }
-                System.out.println(command);
                 doc = convertStringToXMLDocument(command);
                 NodeList amigos=doc.getFirstChild().getChildNodes();
                 for (int i = 0; i < amigos.getLength(); i++) {
@@ -212,8 +210,6 @@ public class Chat extends JFrame implements ActionListener{
                         mensaje.texto=mensajeNode.item(1).getTextContent();
                         mensaje.tiempo=mensajeNode.item(2).getTextContent();
                         amigo.mensajes.add(mensaje);
-                        System.out.println(mensaje.origen);
-                        System.out.println(mensaje.texto);
                     }
                     friendsList.add(amigo);
                 }
