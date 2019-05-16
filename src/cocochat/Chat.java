@@ -76,10 +76,10 @@ public class Chat extends JFrame implements ActionListener{
         this.os = os;
         friendsList();
         groupsList();
-        JButton [] friendsButtons=initButtons(this.friendsList);
-        JButton [] groupsButtons=initButtons0(this.groupsList);
-    JButton [] onlineButtons=initButtons(this.onlineList);
-        JButton [] offlineButtons=initButtons(this.offlineList);
+        JButton [] friendsButtons=initButtonsFriends(this.friendsList);
+        JButton [] groupsButtons=initButtonsGroups(this.groupsList);
+        //JButton [] onlineButtons=initButtonsOnline(this.onlineList);
+        //JButton [] offlineButtons=initButtonsOffline(this.offlineList);
         //requestList();
         this.setPreferredSize(new Dimension(900,900));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -102,8 +102,8 @@ public class Chat extends JFrame implements ActionListener{
         scrollSide.setViewportView(list);
         initSide(friends,friendsButtons);
         initSide(groups,groupsButtons);
-        initSide(online,onlineButtons);
-        initSide(offline,offlineButtons);
+        //initSide(online,onlineButtons);
+        //initSide(offline,offlineButtons);
         y+=50;
         list.add(requests);
         list.setPreferredSize(new Dimension(300,1000));
@@ -168,7 +168,7 @@ public class Chat extends JFrame implements ActionListener{
         }
     }
 
-    public JButton[] initButtons(ArrayList<Amigo> friendsList){
+    public JButton[] initButtonsFriends(ArrayList<Amigo> friendsList){
         JButton [] botones = new JButton[friendsList.size()];
         for (int i = 0; i < friendsList.size(); i++)
         {
@@ -201,6 +201,38 @@ public class Chat extends JFrame implements ActionListener{
         }
     }
 
+    public JButton[] initButtonsGroups(ArrayList<Grupo> groupsList){
+        JButton [] botones = new JButton[groupsList.size()];
+        for (int i = 0; i < groupsList.size(); i++)
+        {
+            final int id = i;
+            botones[i] = new JButton( groupsList.get(i).nombre);
+            botones[i].addActionListener((ActionEvent e) ->
+            {
+                showMensajesGrupo(id);
+            });
+
+        }
+        return botones;
+    }
+    
+    public void showMensajesGrupo(int id)
+    {
+        Grupo grupo = groupsList.get(id);
+        for(int i = 0; i < grupo.mensajes.size(); i++)
+        {
+            if(grupo.mensajes.get(i).origen == 0)
+            {
+                chatPanel.setText(chatPanel.getText()+"\nYo:\n");
+            }
+            else
+            {
+                chatPanel.setText(chatPanel.getText()+"\n"+grupo.mensajes.get(i).origen+":\n");
+            }
+            chatPanel.setText(chatPanel.getText()+grupo.mensajes.get(i).texto+"\n");
+            chatPanel.setText(chatPanel.getText()+grupo.mensajes.get(i).tiempo+"\n");
+        }
+    }
 
     public void friendsList(){
             byte[] bytes;
