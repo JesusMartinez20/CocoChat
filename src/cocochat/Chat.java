@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cocochat;
 
 import com.sun.org.apache.xerces.internal.parsers.DOMParser;
@@ -44,7 +39,12 @@ import org.xml.sax.InputSource;
 public class Chat extends JFrame implements ActionListener{
    int nFriends=2, nGroups=2, nOnline=2, nOffline=2;
    int destination;
-
+   
+   ArrayList<Amigo> friendsList = new ArrayList<>();
+   ArrayList<Amigo> groupsList = new ArrayList<>();
+   ArrayList<Amigo> onlineList = new ArrayList<>();
+   ArrayList<Amigo> offlineList = new ArrayList<>();
+   
    JLabel header=new JLabel();
    JTextField description=new JTextField();
    JTextField friends=new JTextField();
@@ -56,10 +56,8 @@ public class Chat extends JFrame implements ActionListener{
 
    JButton send=new JButton("Enviar");
    JButton requests=new JButton("Solicitudes");
-   JButton [] friendsButtons=initButtons(this.friendsList);
-   JButton [] groupsButtons=initButtons(this.groupsList);
-   JButton [] onlineButtons=initButtons(this.onlineList);
-   JButton [] offlineButtons=initButtons(this.offlineList);
+   
+   
    Socket clientSocket = null;
    PrintStream os = null;
 
@@ -69,16 +67,17 @@ public class Chat extends JFrame implements ActionListener{
    JList list = new JList();
 
    int y=0;
-   ArrayList<Amigo> friendsList = new ArrayList<>();
-   ArrayList<Amigo> groupsList = new ArrayList<>();
-   ArrayList<Amigo> onlineList = new ArrayList<>();
-   ArrayList<Amigo> offlineList = new ArrayList<>();
-
-
+   
+  
+    
     Chat(Socket clientSocket,PrintStream os) {
         this.clientSocket = clientSocket;
         this.os = os;
         friendsList();
+        JButton [] friendsButtons=initButtons(this.friendsList);
+        JButton [] groupsButtons=initButtons(this.groupsList);
+    JButton [] onlineButtons=initButtons(this.onlineList);
+        JButton [] offlineButtons=initButtons(this.offlineList);
       //  groupsList();
         //messages();
         //requestList();
@@ -169,14 +168,15 @@ public class Chat extends JFrame implements ActionListener{
 
         }
     }
-
+    
     public JButton[] initButtons(ArrayList<Amigo> friendsList){
+        friendsList.forEach((n)-> System.out.println(n));
         JButton [] botones = new JButton[friendsList.size()];
-        for (int i = 0; i < friendsList.size(); i++)
+        for (int i = 0; i < friendsList.size(); i++) 
         {
             botones[i] = new JButton( friendsList.get(i).alias);
             botones[i].addActionListener(this);
-
+              
         }
         return botones;
     }
@@ -254,16 +254,16 @@ public class Chat extends JFrame implements ActionListener{
                 Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
             }
     }
-
+    
     @Override
     public void actionPerformed(ActionEvent e){
         if(e.getSource()==send){
            sendMessage();
         }
     }
-
+    
     public void sendMessage(){
-        try
+        try 
             {
                 os.print("message"+"<s>"+this.message.getText()+"<s>"+this.destination);
                 while(clientSocket.getInputStream().available()==0);
