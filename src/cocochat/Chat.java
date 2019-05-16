@@ -25,6 +25,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import java.io.StringReader;
+import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -51,7 +52,7 @@ public class Chat extends JFrame implements ActionListener{
    JTextField groups=new JTextField();
    JTextField online=new JTextField();
    JTextField offline=new JTextField();
-   JTextField chatPanel=new JTextField();
+   JTextPane chatPanel=new JTextPane();
    JTextField message=new JTextField();
 
    JButton send=new JButton("Enviar");
@@ -97,7 +98,6 @@ public class Chat extends JFrame implements ActionListener{
         online.setEditable(false);
         offline.setText("Offline");
         offline.setEditable(false);
-        chatPanel.setText("mensajes");
         chatPanel.setEditable(false);
         scrollChat.setViewportView(chatPanel);
         scrollSide.setViewportView(list);
@@ -173,11 +173,33 @@ public class Chat extends JFrame implements ActionListener{
         JButton [] botones = new JButton[friendsList.size()];
         for (int i = 0; i < friendsList.size(); i++) 
         {
+            final int id = i;
             botones[i] = new JButton( friendsList.get(i).alias);
-            botones[i].addActionListener(this);
+            botones[i].addActionListener((ActionEvent e) -> 
+            {
+                showMensajesAmigo(id);
+            });
               
         }
         return botones;
+    }
+    
+    public void showMensajesAmigo(int id)
+    {
+        Amigo amigo = friendsList.get(id);
+        for(int i = 0; i < amigo.mensajes.size(); i++)
+        {
+            if(amigo.mensajes.get(i).origen == 0)
+            {
+                chatPanel.setText(chatPanel.getText()+"\nYo:\n");
+            }
+            else
+            {
+                chatPanel.setText(chatPanel.getText()+"\n"+amigo.alias+":\n");
+            }
+            chatPanel.setText(chatPanel.getText()+amigo.mensajes.get(i).texto+"\n");
+            chatPanel.setText(chatPanel.getText()+amigo.mensajes.get(i).tiempo+"\n");
+        }
     }
 
 
