@@ -45,8 +45,8 @@ public class Chat extends JFrame implements ActionListener, Runnable{
 
    ArrayList<Amigo> friendsList = new ArrayList<>();
    ArrayList<Grupo> groupsList = new ArrayList<>();
-   ArrayList<Amigo> onlineList = new ArrayList<>();
-   ArrayList<Amigo> offlineList = new ArrayList<>();
+   ArrayList<Online> onlineList = new ArrayList<>();
+   ArrayList<Offline> offlineList = new ArrayList<>();
    ArrayList<Solicitudes_Grupos> groupsRequests = new ArrayList<>();
 
    JLabel header=new JLabel();
@@ -386,6 +386,62 @@ public class Chat extends JFrame implements ActionListener, Runnable{
                 os.print("friends");
                 while(clientSocket.getInputStream().available()==0);
                    //this.requestList=new byte[clientSocket.getInputStream().available()];
+            } catch (IOException ex) {
+                Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
+    
+    public void onlineList(){
+        byte[] bytes;
+            String command="";
+            String[] splitted;
+            Document doc = null;
+            try
+            {
+                os.print("online");
+                while(!command.contains("</online>")){
+                while(clientSocket.getInputStream().available()==0);
+                   bytes=new byte[clientSocket.getInputStream().available()];
+                   clientSocket.getInputStream().read(bytes);
+                   command+= new String(bytes);
+                }
+                doc = convertStringToXMLDocument(command);
+                NodeList onlinePeople=doc.getFirstChild().getChildNodes();
+                for (int i = 0; i < onlinePeople.getLength(); i++) {
+                    Online online = new Online();
+                    NodeList onlineNode = onlinePeople.item(i).getChildNodes();
+                    online.id=Integer.parseInt(onlineNode.item(0).getTextContent());
+                    online.name=onlineNode.item(1).getTextContent();
+                    this.onlineList.add(online);
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
+
+    public void offlineList(){
+        byte[] bytes;
+            String command="";
+            String[] splitted;
+            Document doc = null;
+            try
+            {
+                os.print("offline");
+                while(!command.contains("</offline>")){
+                while(clientSocket.getInputStream().available()==0);
+                   bytes=new byte[clientSocket.getInputStream().available()];
+                   clientSocket.getInputStream().read(bytes);
+                   command+= new String(bytes);
+                }
+                doc = convertStringToXMLDocument(command);
+                NodeList offlinePeople=doc.getFirstChild().getChildNodes();
+                for (int i = 0; i < offlinePeople.getLength(); i++) {
+                    Offline offline = new Offline();
+                    NodeList offlineNode = offlinePeople.item(i).getChildNodes();
+                    offline.id=Integer.parseInt(offlineNode.item(0).getTextContent());
+                    offline.name=offlineNode.item(1).getTextContent();
+                    this.offlineList.add(offline);
+                }
             } catch (IOException ex) {
                 Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
             }
