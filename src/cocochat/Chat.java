@@ -206,9 +206,8 @@ public class Chat extends JFrame{
                 {
                     e.printStackTrace();
                 }
-                System.out.println(doc.getFirstChild().getFirstChild().getFirstChild().getNodeValue());
                 System.out.println("se detectó fin de etiqueta");
-                Document doc = convertStringToXMLDocument(command);
+                doc = convertStringToXMLDocument(command);
                 System.out.println(doc.getFirstChild().getFirstChild().getNodeName());
             } catch (IOException ex) {
                 Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
