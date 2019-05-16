@@ -66,9 +66,9 @@ public class Chat extends JFrame{
         this.clientSocket = clientSocket;
         this.os = os;
         friendsList();
-        groupsList();
-        messages();
-        requestList();
+      //  groupsList();
+        //messages();
+        //requestList();
         this.setPreferredSize(new Dimension(900,900));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(null);
@@ -170,18 +170,19 @@ public class Chat extends JFrame{
     
     public void friendsList(){
             byte[] bytes;
-            String command;
+            String command="";
             String[] splitted;
             try 
             {
                 os.print("friends");
-                while(true){
+                while(!command.contains("</amigos>")){
                 while(clientSocket.getInputStream().available()==0);
                    bytes=new byte[clientSocket.getInputStream().available()];
                    clientSocket.getInputStream().read(bytes);
-                   command= new String(bytes);
+                   command+= new String(bytes);
                    System.out.println(command);
                 }
+                System.out.println("se detectó fin de etiqueta");
             } catch (IOException ex) {
                 Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
             }
