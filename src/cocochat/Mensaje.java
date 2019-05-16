@@ -10,6 +10,6 @@ package cocochat;
  * @author lucas
  */
 public class Mensaje {
-    int origen;
+    String origen;
     String texto,tiempo;
 }
