@@ -105,7 +105,7 @@ public class Sign_in extends JFrame implements ActionListener{
                     while(clientSocket.getInputStream().available()==0);
                     if(clientSocket.getInputStream().read()=='0')
                     {
-                        JOptionPane.showMessageDialog(this, "Revisa tu usuario y contraseña");
+                        JOptionPane.showMessageDialog(this, "El nickname ya está en uso");
                     }
                     else
                     {
