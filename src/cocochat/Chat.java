@@ -196,20 +196,7 @@ public class Chat extends JFrame{
                    command+= new String(bytes);
                 }
                 System.out.println(command); 
-                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder builder = null;
-                try
-                {
-                    builder = factory.newDocumentBuilder();
-                    doc = builder.parse(new InputSource(new StringReader(command)));
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-                System.out.println(doc.getFirstChild().getFirstChild().getFirstChild().getNodeValue());
-                System.out.println("se detectó fin de etiqueta");
-                Document doc = convertStringToXMLDocument(command);
+                doc = convertStringToXMLDocument(command);
                 NodeList amigos=doc.getFirstChild().getChildNodes();
                 for (int i = 0; i < amigos.getLength(); i++) {
                     Amigo amigo = new Amigo();
