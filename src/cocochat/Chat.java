@@ -82,8 +82,8 @@ public class Chat extends JFrame implements ActionListener, Runnable{
         groupsList();
         JButton [] friendsButtons=initButtonsFriends(this.friendsList);
         JButton [] groupsButtons=initButtonsGroups(this.groupsList);
-        //JButton [] onlineButtons=initButtonsOnline(this.onlineList);
-        //JButton [] offlineButtons=initButtonsOffline(this.offlineList);
+        JButton [] onlineButtons=initButtonsOnline(this.onlineList);
+        JButton [] offlineButtons=initButtonsOffline(this.offlineList);
         //requestList();
         this.setPreferredSize(new Dimension(900,900));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -106,8 +106,8 @@ public class Chat extends JFrame implements ActionListener, Runnable{
         scrollSide.setViewportView(list);
         initSide(friends,friendsButtons);
         initSide(groups,groupsButtons);
-        //initSide(online,onlineButtons);
-        //initSide(offline,offlineButtons);
+        initSide(online,onlineButtons);
+        initSide(offline,offlineButtons);
         y+=50;
         list.add(requests);
         list.setPreferredSize(new Dimension(300,1000));
@@ -247,6 +247,36 @@ public class Chat extends JFrame implements ActionListener, Runnable{
             botones[i].addActionListener((ActionEvent e) ->
             {
                 showMensajesGrupo(id);
+            });
+
+        }
+        return botones;
+    }
+    
+    public JButton[] initButtonsOnline(ArrayList<Online> onlineList){
+        JButton [] botones = new JButton[onlineList.size()];
+        for (int i = 0; i < onlineList.size(); i++)
+        {
+            final int id = i;
+            botones[i] = new JButton( onlineList.get(i).name);
+            botones[i].addActionListener((ActionEvent e) ->
+            {
+                System.out.println("hola");
+            });
+
+        }
+        return botones;
+    }
+    
+    public JButton[] initButtonsOffline(ArrayList<Offline> offlineList){
+        JButton [] botones = new JButton[offlineList.size()];
+        for (int i = 0; i < offlineList.size(); i++)
+        {
+            final int id = i;
+            botones[i] = new JButton( offlineList.get(i).name);
+            botones[i].addActionListener((ActionEvent e) ->
+            {
+                System.out.println("hola");
             });
 
         }
