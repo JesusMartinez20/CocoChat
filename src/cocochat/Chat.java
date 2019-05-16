@@ -18,8 +18,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.GroupLayout;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import org.w3c.dom.Document;
@@ -42,7 +41,9 @@ import org.xml.sax.InputSource;
  *
  * @author Jesús Martínez
  */
-public class Chat extends JFrame{
+public class Chat extends JFrame implements ActionListener{
+   int nFriends=2, nGroups=2, nOnline=2, nOffline=2;
+   int destination;
 
    JLabel header=new JLabel();
    JTextField description=new JTextField();
@@ -55,10 +56,10 @@ public class Chat extends JFrame{
 
    JButton send=new JButton("Enviar");
    JButton requests=new JButton("Solicitudes");
-   JButton [] friendsButtons;
-   //JButton [] groupsButtons=initButtons(2);
-   //JButton [] onlineButtons=initButtons(2);
-   //JButton [] offlineButtons=initButtons(2);
+   JButton [] friendsButtons=initButtons(this.friendsList);
+   JButton [] groupsButtons=initButtons(this.groupsList);
+   JButton [] onlineButtons=initButtons(this.onlineList);
+   JButton [] offlineButtons=initButtons(this.offlineList);
    Socket clientSocket = null;
    PrintStream os = null;
 
@@ -68,20 +69,19 @@ public class Chat extends JFrame{
    JList list = new JList();
 
    int y=0;
-   String user="jesus";
    ArrayList<Amigo> friendsList = new ArrayList<>();
-   byte [] groupsList;
-   byte [] messages;
-   byte [] requestList;
+   ArrayList<Amigo> groupsList = new ArrayList<>();
+   ArrayList<Amigo> onlineList = new ArrayList<>();
+   ArrayList<Amigo> offlineList = new ArrayList<>();
 
-    Chat(Socket clientSocket,PrintStream os){
+
+    Chat(Socket clientSocket,PrintStream os) {
         this.clientSocket = clientSocket;
         this.os = os;
         friendsList();
       //  groupsList();
         //messages();
         //requestList();
-        friendsButtons = initButtons(friendsList);
         this.setPreferredSize(new Dimension(900,900));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(null);
@@ -103,9 +103,9 @@ public class Chat extends JFrame{
         scrollChat.setViewportView(chatPanel);
         scrollSide.setViewportView(list);
         initSide(friends,friendsButtons);
-        //initSide(groups,groupsButtons);
-        //initSide(online,onlineButtons);
-        //initSide(offline,offlineButtons);
+        initSide(groups,groupsButtons);
+        initSide(online,onlineButtons);
+        initSide(offline,offlineButtons);
         y+=50;
         list.add(requests);
         list.setPreferredSize(new Dimension(300,1000));
@@ -171,11 +171,12 @@ public class Chat extends JFrame{
     }
 
     public JButton[] initButtons(ArrayList<Amigo> friendsList){
-        String text;
         JButton [] botones = new JButton[friendsList.size()];
-        for (int i = 0; i < friendsList.size(); i++) 
+        for (int i = 0; i < friendsList.size(); i++)
         {
             botones[i] = new JButton( friendsList.get(i).alias);
+            botones[i].addActionListener(this);
+
         }
         return botones;
     }
@@ -226,7 +227,7 @@ public class Chat extends JFrame{
             {
                 os.print("friends");
                 while(clientSocket.getInputStream().available()==0);
-                   this.messages=new byte[clientSocket.getInputStream().available()];
+                   //this.messages=new byte[clientSocket.getInputStream().available()];
             } catch (IOException ex) {
                 Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -237,7 +238,7 @@ public class Chat extends JFrame{
             {
                 os.print("friends");
                 while(clientSocket.getInputStream().available()==0);
-                   this.groupsList=new byte[clientSocket.getInputStream().available()];
+                   //this.groupsList=new byte[clientSocket.getInputStream().available()];
             } catch (IOException ex) {
                 Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -248,7 +249,25 @@ public class Chat extends JFrame{
             {
                 os.print("friends");
                 while(clientSocket.getInputStream().available()==0);
-                   this.requestList=new byte[clientSocket.getInputStream().available()];
+                   //this.requestList=new byte[clientSocket.getInputStream().available()];
+            } catch (IOException ex) {
+                Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e){
+        if(e.getSource()==send){
+           sendMessage();
+        }
+    }
+
+    public void sendMessage(){
+        try
+            {
+                os.print("message"+"<s>"+this.message.getText()+"<s>"+this.destination);
+                while(clientSocket.getInputStream().available()==0);
+                   //this.requestList=new byte[clientSocket.getInputStream().available()];
             } catch (IOException ex) {
                 Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
             }
