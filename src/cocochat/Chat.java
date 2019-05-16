@@ -37,7 +37,9 @@ import org.xml.sax.InputSource;
  *
  * @author Jesús Martínez
  */
-public class Chat extends JFrame implements ActionListener{
+public class Chat extends JFrame implements ActionListener, Runnable{
+
+
    int nFriends=2, nGroups=2, nOnline=2, nOffline=2;
    int destination;
 
@@ -55,6 +57,7 @@ public class Chat extends JFrame implements ActionListener{
    JTextField offline=new JTextField();
    JTextPane chatPanel=new JTextPane();
    JTextField message=new JTextField();
+   int last = 0,friend = 0, group = 0;
 
    JButton send=new JButton("Enviar");
    JButton requests=new JButton("Solicitudes");
@@ -112,7 +115,10 @@ public class Chat extends JFrame implements ActionListener{
         scrollSide.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scrollChat.setViewportView(chatPanel);
         scrollChat.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-
+        send.addActionListener((ActionEvent e) ->
+            {
+                sendNudes();
+            });
 
         GroupLayout view= new GroupLayout(this.getContentPane());
 
@@ -156,6 +162,19 @@ public class Chat extends JFrame implements ActionListener{
         view.setAutoCreateGaps(true);
     }
 
+    public void sendNudes()
+    {
+        if(last == 1)
+        {
+            os.print("mensaje<s>amigo<s>"+friendsList.get(friend).id+"<s>"+message.getText());
+            message.setText("");
+        }
+        /*else
+        {
+            os.print("mensaje<s>grupo<s>"+groupsList.get(friend).id+"<s>Mensaje de relleno jajajaja");
+        }*/
+    }
+    
    public void initSide(JTextField label, JButton[] buttons){
         y+=50;
         label.setBounds(0,y,200, 50);
@@ -215,6 +234,8 @@ public class Chat extends JFrame implements ActionListener{
             chatPanel.setText(chatPanel.getText()+amigo.mensajes.get(i).texto+"\n");
             chatPanel.setText(chatPanel.getText()+amigo.mensajes.get(i).tiempo+"\n");
         }
+        last = 1;
+        friend = id;
     }
 
     public JButton[] initButtonsGroups(ArrayList<Grupo> groupsList){
@@ -249,6 +270,8 @@ public class Chat extends JFrame implements ActionListener{
             chatPanel.setText(chatPanel.getText()+grupo.mensajes.get(i).texto+"\n");
             chatPanel.setText(chatPanel.getText()+grupo.mensajes.get(i).tiempo+"\n");
         }
+        last = 2;
+        friend = id;
     }
 
     public void friendsList(){
@@ -407,5 +430,10 @@ public class Chat extends JFrame implements ActionListener{
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public void run() {
+        
     }
  }
