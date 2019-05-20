@@ -5,6 +5,7 @@
  */
 package cocochat;
 
+import java.awt.Dimension;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -91,6 +92,31 @@ public class ListenThread extends Thread{
                                     
                                 }
                             }
+                        }
+                        case "online":{
+                            chat.y = 0;
+                            Online online = new Online();
+                            online.id = Integer.parseInt(splitted[1]);
+                            online.name = splitted[2];
+                            chat.onlineList.add(online);
+                            for (int i = 0; i < chat.offlineList.size(); i++)
+                            {
+                                if(chat.offlineList.get(i).id == Integer.parseInt(splitted[1]))
+                                {
+                                    chat.offlineList.remove(i);
+                                }          
+                            }
+                            chat.onlineButtons = chat.initButtonsOnline(chat.onlineList);
+                            chat.offlineButtons = chat.initButtonsOffline(chat.offlineList);
+                            chat.list.removeAll();
+                            chat.initSide(chat.groupsReq, chat.groupsRequestButtons);
+                            chat.initSide(chat.friends,chat.friendsButtons);
+                            chat.initSide(chat.groups,chat.groupsButtons);
+                            chat.initSide(chat.online,chat.onlineButtons);
+                            chat.initSide(chat.offline,chat.offlineButtons);
+                            chat.list.setPreferredSize(new Dimension(300,1000));
+                            chat.scrollSide.setViewportView(chat.list);
+                            chat.y += 50;
                         }
                     }
                     if(chat.last == 1)

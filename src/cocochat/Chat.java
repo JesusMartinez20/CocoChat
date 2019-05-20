@@ -72,6 +72,12 @@ public class Chat extends JFrame implements ActionListener, Runnable{
    JScrollPane scrollSide = new JScrollPane();
 
    JList list = new JList();
+   
+   JButton [] friendsButtons;
+   JButton [] groupsButtons;
+   JButton [] onlineButtons;
+   JButton [] offlineButtons;
+   JButton [] groupsRequestButtons;
 
    int y=0;
 
@@ -85,11 +91,11 @@ public class Chat extends JFrame implements ActionListener, Runnable{
         groupsRequests();
         onlineList();
         offlineList();
-        JButton [] friendsButtons=initButtonsFriends(this.friendsList);
-        JButton [] groupsButtons=initButtonsGroups(this.groupsList);
-        JButton [] onlineButtons=initButtonsOnline(this.onlineList);
-        JButton [] offlineButtons=initButtonsOffline(this.offlineList);
-        JButton [] groupsRequestButtons=initButtonsGroupsReq(this.groupsRequests);
+        friendsButtons=initButtonsFriends(this.friendsList);
+        groupsButtons=initButtonsGroups(this.groupsList);
+        onlineButtons=initButtonsOnline(this.onlineList);
+        offlineButtons=initButtonsOffline(this.offlineList);
+        groupsRequestButtons=initButtonsGroupsReq(this.groupsRequests);
         this.setPreferredSize(new Dimension(900,900));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(null);
