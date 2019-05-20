@@ -83,12 +83,13 @@ public class Chat extends JFrame implements ActionListener, Runnable{
         friendsList();
         groupsList();
         groupsRequests();
+        onlineList();
+        offlineList();
         JButton [] friendsButtons=initButtonsFriends(this.friendsList);
         JButton [] groupsButtons=initButtonsGroups(this.groupsList);
         JButton [] onlineButtons=initButtonsOnline(this.onlineList);
         JButton [] offlineButtons=initButtonsOffline(this.offlineList);
         JButton [] groupsRequestButtons=initButtonsGroupsReq(this.groupsRequests);
-        //requestList();
         this.setPreferredSize(new Dimension(900,900));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(null);
@@ -432,16 +433,6 @@ public class Chat extends JFrame implements ActionListener, Runnable{
             }
     }
 
-    public void requestList(){
-            try
-            {
-                os.print("friends");
-                while(clientSocket.getInputStream().available()==0);
-                   //this.requestList=new byte[clientSocket.getInputStream().available()];
-            } catch (IOException ex) {
-                Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
-            }
-    }
     
     public void onlineList(){
         byte[] bytes;
