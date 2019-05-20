@@ -14,8 +14,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *Usu
- * @author Jesús Martínez
+ *
+ * @author lghhs
  */
 public class CocoChat
 {

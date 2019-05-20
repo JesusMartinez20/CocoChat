@@ -109,8 +109,13 @@ public class Sign_in extends JFrame implements ActionListener{
                     }
                     else
                     {
-                        new Chat(clientSocket, os).setVisible(true);
-                        this.setVisible(false);
+                        Chat chat = new Chat(clientSocket, os);
+                        chat.setVisible(true);
+                        Thread t = new Thread(chat);
+                        t.start();
+                        ListenThread listen = new ListenThread(this.clientSocket, chat.friendsList, chat.groupsList, chat);
+                        listen.start();
+                        this.dispose();
                     }
                 }
             } catch (IOException ex) {
