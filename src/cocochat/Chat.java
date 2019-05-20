@@ -25,6 +25,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import java.io.StringReader;
+import java.sql.Timestamp;
+import java.util.Date;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
 import javax.xml.parsers.DocumentBuilder;
@@ -170,12 +172,31 @@ public class Chat extends JFrame implements ActionListener, Runnable{
         if(last == 1)
         {
             os.print("mensaje<s>amigo<s>"+friendsList.get(friend).id+"<s>"+message.getText());
+            Mensaje mensaje = new Mensaje();
+            mensaje.origen = "0";
+            mensaje.texto = message.getText();
+            Date date= new Date();
+            long time = date.getTime();
+            Timestamp ts = new Timestamp(time);
+            mensaje.tiempo = ts.toString();
+            friendsList.get(friend).mensajes.add(mensaje);
+            showMensajesAmigo(friend);
             message.setText("");
         }
-        /*else
+        else
         {
-            os.print("mensaje<s>grupo<s>"+groupsList.get(friend).id+"<s>Mensaje de relleno jajajaja");
-        }*/
+            os.print("mensaje<s>grupo<s>"+groupsList.get(group).id+"<s>"+message.getText());
+            Mensaje mensaje = new Mensaje();
+            mensaje.origen = "0";
+            mensaje.texto = message.getText();
+            Date date= new Date();
+            long time = date.getTime();
+            Timestamp ts = new Timestamp(time);
+            mensaje.tiempo = ts.toString();
+            groupsList.get(group).mensajes.add(mensaje);
+            showMensajesGrupo(group);
+            message.setText("");
+        }
     }
     
    public void initSide(JTextField label, JButton[] buttons){
@@ -359,9 +380,7 @@ public class Chat extends JFrame implements ActionListener, Runnable{
                    bytes=new byte[clientSocket.getInputStream().available()];
                    clientSocket.getInputStream().read(bytes);
                    command+= new String(bytes);
-                    System.out.println(command);
                 }
-                System.out.println(command);
                 doc = convertStringToXMLDocument(command);
                 NodeList grupos=doc.getFirstChild().getChildNodes();
                 for (int i = 0; i < grupos.getLength(); i++) {
@@ -398,9 +417,7 @@ public class Chat extends JFrame implements ActionListener, Runnable{
                    bytes=new byte[clientSocket.getInputStream().available()];
                    clientSocket.getInputStream().read(bytes);
                    command+= new String(bytes);
-                   System.out.println(command);
                 }
-                System.out.println(command);
                 doc = convertStringToXMLDocument(command);
                 NodeList grupos=doc.getFirstChild().getChildNodes();
                 for (int i = 0; i < grupos.getLength(); i++) {
@@ -525,6 +542,6 @@ public class Chat extends JFrame implements ActionListener, Runnable{
 
     @Override
     public void run() {
-        
+        while(true);
     }
  }

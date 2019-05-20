@@ -10,12 +10,13 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 /**
  *
  * @author lghhs
  */
-public class ListenThread implements Runnable{
+public class ListenThread extends Thread{
 
     Socket clientSocket;
     ArrayList<Amigo> friendsList;
@@ -32,11 +33,13 @@ public class ListenThread implements Runnable{
     
     @Override
     public void run() {
+        while(true)
+        {
         try {
             byte[] bytes;
             String command;
             String[] splitted;
-            if(clientSocket.getInputStream().available()==0){
+            if(clientSocket.getInputStream().available()!=0){
             bytes=new byte[clientSocket.getInputStream().available()];
                     clientSocket.getInputStream().read(bytes);
                     command= new String(bytes);
@@ -49,7 +52,7 @@ public class ListenThread implements Runnable{
                                     {
                                         Amigo amigo = new Amigo();
                                         amigo = friendsList.get(i);
-                                        if(splitted[2].equals(amigo.alias))
+                                        if(Integer.parseInt(splitted[2]) == amigo.id)
                                         {
                                             Mensaje mensaje = new Mensaje();
                                             mensaje.origen = amigo.alias;
@@ -58,13 +61,14 @@ public class ListenThread implements Runnable{
                                             amigo.mensajes.add(mensaje);
                                         }
                                     }
+                                    break;
                                 }
                                 case "grupo":{
                                     for(int i = 0; i < groupsList.size(); i++)
                                     {
                                         Grupo grupo = new Grupo();
                                         grupo= groupsList.get(i);
-                                        if(splitted[2].equals(grupo.id))
+                                        if(Integer.parseInt(splitted[2]) == grupo.id)
                                         {
                                             Mensaje mensaje = new Mensaje();
                                             mensaje.origen = splitted[3];
@@ -73,6 +77,7 @@ public class ListenThread implements Runnable{
                                             grupo.mensajes.add(mensaje);
                                         }
                                     }
+                                    break;
                                 }
                             }
                         }
@@ -96,10 +101,11 @@ public class ListenThread implements Runnable{
                     {
                         chat.showMensajesGrupo(chat.group);
                     }
-            }
+                }
         } catch (IOException ex) {
             Logger.getLogger(ListenThread.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
     }
     
 }

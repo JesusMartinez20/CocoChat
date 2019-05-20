@@ -90,9 +90,10 @@ public class Log_in extends JFrame implements ActionListener{
                     {
                         Chat chat = new Chat(clientSocket, os);
                         chat.setVisible(true);
-                        chat.run();
+                        Thread t = new Thread(chat);
+                        t.start();
                         ListenThread listen = new ListenThread(this.clientSocket, chat.friendsList, chat.groupsList, chat);
-                        listen.run();
+                        listen.start();
                         this.dispose();
                     }
                     if(retries == 3)
