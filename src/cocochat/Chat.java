@@ -57,10 +57,10 @@ public class Chat extends JFrame implements ActionListener, Runnable{
    JTextField offline=new JTextField();
    JTextPane chatPanel=new JTextPane();
    JTextField message=new JTextField();
+   JTextField groupsReq = new JTextField();
    int last = 0,friend = 0, group = 0;
 
    JButton send=new JButton("Enviar");
-   JButton requests=new JButton("Solicitudes");
 
 
    Socket clientSocket = null;
@@ -80,19 +80,22 @@ public class Chat extends JFrame implements ActionListener, Runnable{
         this.os = os;
         friendsList();
         groupsList();
+        groupsRequests();
         JButton [] friendsButtons=initButtonsFriends(this.friendsList);
         JButton [] groupsButtons=initButtonsGroups(this.groupsList);
         JButton [] onlineButtons=initButtonsOnline(this.onlineList);
         JButton [] offlineButtons=initButtonsOffline(this.offlineList);
+        JButton [] groupsRequestButtons=initButtonsGroupsReq(this.groupsRequests);
         //requestList();
         this.setPreferredSize(new Dimension(900,900));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(null);
         this.getContentPane().setBackground(Color.pink);
-        requests.setSize(200,50);
         header.setText("CocoChat");
         description.setText("chat");
         description.setEditable(false);
+        groupsReq.setText("Solicitudes de Grupos");
+        groupsReq.setEditable(false);
         friends.setText("Amigos");
         friends.setEditable(false);
         groups.setText("Grupos");
@@ -104,12 +107,12 @@ public class Chat extends JFrame implements ActionListener, Runnable{
         chatPanel.setEditable(false);
         scrollChat.setViewportView(chatPanel);
         scrollSide.setViewportView(list);
+        initSide(groupsReq, groupsRequestButtons);
         initSide(friends,friendsButtons);
         initSide(groups,groupsButtons);
         initSide(online,onlineButtons);
         initSide(offline,offlineButtons);
         y+=50;
-        list.add(requests);
         list.setPreferredSize(new Dimension(300,1000));
         scrollSide.setViewportView(list);
         scrollSide.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -202,20 +205,7 @@ public class Chat extends JFrame implements ActionListener, Runnable{
         }
         return botones;
     }
-    public JButton[] initButtons0(ArrayList<Grupo> friendsList){
-        JButton [] botones = new JButton[friendsList.size()];
-        for (int i = 0; i < friendsList.size(); i++)
-        {
-            final int id = i;
-            botones[i] = new JButton( friendsList.get(i).nombre);
-            botones[i].addActionListener((ActionEvent e) ->
-            {
-                showMensajesAmigo(id);
-            });
 
-        }
-        return botones;
-    }
 
     public void showMensajesAmigo(int id)
     {
@@ -274,6 +264,21 @@ public class Chat extends JFrame implements ActionListener, Runnable{
         {
             final int id = i;
             botones[i] = new JButton( offlineList.get(i).name);
+            botones[i].addActionListener((ActionEvent e) ->
+            {
+                System.out.println("hola");
+            });
+
+        }
+        return botones;
+    }
+    
+    public JButton[] initButtonsGroupsReq(ArrayList<Solicitudes_Grupos> groupsReqList){
+        JButton [] botones = new JButton[groupsReqList.size()];
+        for (int i = 0; i < groupsReqList.size(); i++)
+        {
+            final int id = i;
+            botones[i] = new JButton( groupsReqList.get(i).nombre);
             botones[i].addActionListener((ActionEvent e) ->
             {
                 System.out.println("hola");
