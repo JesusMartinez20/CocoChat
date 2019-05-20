@@ -5,6 +5,8 @@
  */
 package cocochat;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Jesús Martínez
@@ -12,6 +14,7 @@ package cocochat;
 public class Offline {
     String name;
     int id;
+    ArrayList<Mensaje> mensajes;
     
     Offline(){
         
