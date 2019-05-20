@@ -81,17 +81,19 @@ public class ListenThread extends Thread{
                                     break;
                                 }
                             }
+                            break;
                         }
                         case "solicitud":{
                             switch(splitted[1]){
                                 case "amistad":
                                 {
-                                    
+                                    break;
                                 }
                                 case "grupo":{
-                                    
+                                    break;
                                 }
                             }
+                            break;
                         }
                         case "online":{
                             chat.y = 0;
@@ -109,6 +111,7 @@ public class ListenThread extends Thread{
                             chat.onlineButtons = chat.initButtonsOnline(chat.onlineList);
                             chat.offlineButtons = chat.initButtonsOffline(chat.offlineList);
                             chat.list.removeAll();
+                            chat.initSide(chat.friendsReq, chat.friendsRequestsButtons);
                             chat.initSide(chat.groupsReq, chat.groupsRequestButtons);
                             chat.initSide(chat.friends,chat.friendsButtons);
                             chat.initSide(chat.groups,chat.groupsButtons);
@@ -117,6 +120,7 @@ public class ListenThread extends Thread{
                             chat.list.setPreferredSize(new Dimension(300,1000));
                             chat.scrollSide.setViewportView(chat.list);
                             chat.y += 50;
+                            break;
                         }
                     }
                     if(chat.last == 1)

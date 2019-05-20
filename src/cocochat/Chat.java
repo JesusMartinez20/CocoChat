@@ -50,6 +50,7 @@ public class Chat extends JFrame implements ActionListener, Runnable{
    ArrayList<Online> onlineList = new ArrayList<>();
    ArrayList<Offline> offlineList = new ArrayList<>();
    ArrayList<Solicitudes_Grupos> groupsRequests = new ArrayList<>();
+   ArrayList<Solicitudes_Amigos> friendsRequests = new ArrayList<>();
 
    JLabel header=new JLabel();
    JTextField description=new JTextField();
@@ -60,6 +61,7 @@ public class Chat extends JFrame implements ActionListener, Runnable{
    JTextPane chatPanel=new JTextPane();
    JTextField message=new JTextField();
    JTextField groupsReq = new JTextField();
+   JTextField friendsReq = new JTextField();
    int last = 0,friend = 0, group = 0;
 
    JButton send=new JButton("Enviar");
@@ -78,6 +80,7 @@ public class Chat extends JFrame implements ActionListener, Runnable{
    JButton [] onlineButtons;
    JButton [] offlineButtons;
    JButton [] groupsRequestButtons;
+   JButton [] friendsRequestsButtons;
 
    int y=0;
 
@@ -89,6 +92,7 @@ public class Chat extends JFrame implements ActionListener, Runnable{
         friendsList();
         groupsList();
         groupsRequests();
+        friendsRequests();
         onlineList();
         offlineList();
         friendsButtons=initButtonsFriends(this.friendsList);
@@ -96,6 +100,7 @@ public class Chat extends JFrame implements ActionListener, Runnable{
         onlineButtons=initButtonsOnline(this.onlineList);
         offlineButtons=initButtonsOffline(this.offlineList);
         groupsRequestButtons=initButtonsGroupsReq(this.groupsRequests);
+        friendsRequestsButtons=initButtonsFriendsReq(this.friendsRequests);
         this.setPreferredSize(new Dimension(900,900));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(null);
@@ -103,6 +108,8 @@ public class Chat extends JFrame implements ActionListener, Runnable{
         header.setText("CocoChat");
         description.setText("chat");
         description.setEditable(false);
+        friendsReq.setText("Solicitudes de Amigos");
+        friendsReq.setEditable(false);
         groupsReq.setText("Solicitudes de Grupos");
         groupsReq.setEditable(false);
         friends.setText("Amigos");
@@ -116,6 +123,7 @@ public class Chat extends JFrame implements ActionListener, Runnable{
         chatPanel.setEditable(false);
         scrollChat.setViewportView(chatPanel);
         scrollSide.setViewportView(list);
+        initSide(friendsReq, friendsRequestsButtons);
         initSide(groupsReq, groupsRequestButtons);
         initSide(friends,friendsButtons);
         initSide(groups,groupsButtons);
@@ -316,6 +324,21 @@ public class Chat extends JFrame implements ActionListener, Runnable{
         return botones;
     }
     
+    public JButton[] initButtonsFriendsReq(ArrayList<Solicitudes_Amigos> friendsReqList){
+        JButton [] botones = new JButton[friendsReqList.size()];
+        for (int i = 0; i < friendsReqList.size(); i++)
+        {
+            final int id = i;
+            botones[i] = new JButton( friendsReqList.get(i).nombre);
+            botones[i].addActionListener((ActionEvent e) ->
+            {
+                System.out.println("hola");
+            });
+
+        }
+        return botones;
+    }
+    
     public void showMensajesGrupo(int id)
     {
         chatPanel.setText("");
@@ -433,6 +456,34 @@ public class Chat extends JFrame implements ActionListener, Runnable{
                     request.id=Integer.parseInt(grupoNode.item(0).getTextContent());
                     request.nombre=grupoNode.item(1).getTextContent();
                     groupsRequests.add(request);
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
+    
+    public void friendsRequests(){
+            byte[] bytes;
+            String command="";
+            String[] splitted;
+            Document doc = null;
+            try
+            {              
+                os.print("requestsAmigo");
+                while(!command.contains("</amigos>")){
+                while(clientSocket.getInputStream().available()==0);
+                   bytes=new byte[clientSocket.getInputStream().available()];
+                   clientSocket.getInputStream().read(bytes);
+                   command+= new String(bytes);
+                }
+                doc = convertStringToXMLDocument(command);
+                NodeList amigos=doc.getFirstChild().getChildNodes();
+                for (int i = 0; i < amigos.getLength(); i++) {
+                    Solicitudes_Amigos request = new Solicitudes_Amigos();
+                    NodeList amigoNode = amigos.item(i).getChildNodes();
+                    request.id=Integer.parseInt(amigoNode.item(0).getTextContent());
+                    request.nombre=amigoNode.item(1).getTextContent();
+                    friendsRequests.add(request);
                 }
             } catch (IOException ex) {
                 Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
