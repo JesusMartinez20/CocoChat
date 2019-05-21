@@ -244,6 +244,30 @@ public class ListenThread extends Thread{
                             JOptionPane.showMessageDialog(chat, "Usuario no encontrado");
                             break;
                         }
+                        case "eliminadoen":{
+                            JOptionPane.showMessageDialog(chat, "Usuario eliminado");
+                            break;
+                        }
+                        case "nuevo":{
+                            Grupo grupo = new Grupo();
+                                    grupo.id = Integer.parseInt(splitted[1]);
+                                    grupo.nombre = splitted[2];
+                                    chat.groupsList.add(grupo);
+                                    chat.groupsButtons = chat.initButtonsGroups(chat.groupsList);
+                                    chat.restartButtons();
+                        }
+                        case "eliminar":{
+                            for (int i = 0; i < chat.groupsList.size(); i++)
+                                    {
+                                        if(chat.groupsList.get(i).id == Integer.parseInt(splitted[1]))
+                                        {
+                                            chat.groupsList.remove(i);
+                                        }          
+                                    }
+                                    chat.groupsButtons = chat.initButtonsGroups(chat.groupsList);
+                                    chat.restartButtons();
+                                    break;
+                        }
                     }
                     if(chat.last == 1)
                     {

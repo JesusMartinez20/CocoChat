@@ -67,8 +67,10 @@ public class Chat extends JFrame implements Runnable{
 
    JButton send=new JButton("Enviar");
    JButton botonPanel = new JButton("");
-
-
+   JButton nuevoGrupo = new JButton("Crear Grupo");
+   JButton eliminarGrupo = new JButton("Eliminar Grupo");
+    JButton eliminarPersona = new JButton("Eliminar Persona");
+   
    Socket clientSocket = null;
    PrintStream os = null;
 
@@ -145,7 +147,21 @@ public class Chat extends JFrame implements Runnable{
             {
                 varButton();
             });
-
+        nuevoGrupo.addActionListener((ActionEvent e) ->
+        {
+            newGrupo();
+        }
+        );
+        eliminarGrupo.addActionListener((ActionEvent e) ->
+        {
+            deleteGrupo();
+        }
+        );
+        eliminarPersona.addActionListener((ActionEvent e) ->
+        {
+            deletePersona();
+        }
+        );
         GroupLayout view= new GroupLayout(this.getContentPane());
 
         view.setHorizontalGroup(
@@ -155,8 +171,11 @@ public class Chat extends JFrame implements Runnable{
                             .addComponent(scrollSide,200,200,200)
                             .addGroup(view.createParallelGroup()
                                     .addGroup(view.createSequentialGroup()
-                                            .addComponent(description,400,400,400)
+                                            .addComponent(description,300,300,300)
                                             .addComponent(botonPanel,100,100,100)
+                                            .addComponent(nuevoGrupo, 150, 150, 150)
+                                            .addComponent(eliminarGrupo, 150, 150, 150)
+                                            .addComponent(eliminarPersona, 150, 150, 150)
                                     )
                                     .addComponent(scrollChat,500,500,500)
                                     .addGroup(view.createSequentialGroup()
@@ -177,6 +196,9 @@ public class Chat extends JFrame implements Runnable{
                                     .addGroup(view.createParallelGroup()
                                             .addComponent(description,50,50,50)
                                             .addComponent(botonPanel,50,50,50)
+                                            .addComponent(nuevoGrupo, 50, 50, 50)
+                                            .addComponent(eliminarGrupo, 50, 50, 50)
+                                            .addComponent(eliminarPersona, 50, 50, 50)
                                     )
                                     .addComponent(scrollChat)
                                     .addGroup(view.createParallelGroup()
@@ -250,6 +272,31 @@ public class Chat extends JFrame implements Runnable{
             showMessagesOnline(nofriend);
             message.setText("");
         }
+    }
+    
+    public void newGrupo(){
+        String input = JOptionPane.showInputDialog(null,"Nombre del grupo");
+        os.print("nuevo<s>"+input);
+    }
+    
+    public void deleteGrupo()
+    {
+        os.print("eliminar<s>grupo<s>"+groupsList.get(group).id);
+        for (int i = 0; i < groupsList.size(); i++)
+                                    {
+                                        if(groupsList.get(i).id == groupsList.get(group).id)
+                                        {
+                                            groupsList.remove(i);
+                                        }          
+                                    }
+                                    groupsButtons = initButtonsGroups(groupsList);
+                                    restartButtons();
+    }
+    
+    public void deletePersona()
+    {
+        String input = JOptionPane.showInputDialog(null,"Nombre de la persona a eliminar");
+        os.print("eliminar<s>persona<s>"+input+"<s>"+groupsList.get(group).id);
     }
     
     public void varButton()
