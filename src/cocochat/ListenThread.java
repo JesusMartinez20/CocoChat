@@ -112,6 +112,76 @@ public class ListenThread extends Thread{
                             chat.restartButtons();
                             break;
                         }
+                        case "aceptado":{
+                            switch(splitted[1]){
+                                case "amistad":
+                                {
+                                    Amigo amigo = new Amigo();
+                                    for (int i = 0; i < chat.friendsRequests.size(); i++)
+                                    {
+                                        if(chat.friendsRequests.get(i).id == Integer.parseInt(splitted[2]))
+                                        {
+                                            amigo.id = Integer.parseInt(splitted[2]);
+                                            amigo.alias = chat.friendsRequests.get(i).nombre;
+                                            chat.friendsRequests.remove(i);
+                                        }          
+                                    }
+                                    chat.friendsList.add(amigo);
+                                    chat.friendsButtons = chat.initButtonsFriends(chat.friendsList);
+                                    chat.friendsRequestsButtons = chat.initButtonsFriendsReq(chat.friendsRequests);
+                                    chat.restartButtons();
+                                    break;
+                                }
+                                case "grupo":{
+                                    Grupo grupo = new Grupo();
+                                    for (int i = 0; i < chat.groupsRequests.size(); i++)
+                                    {
+                                        if(chat.groupsRequests.get(i).id == Integer.parseInt(splitted[2]))
+                                        {
+                                            grupo.id = Integer.parseInt(splitted[2]);
+                                            grupo.nombre = chat.groupsRequests.get(i).nombre;
+                                            chat.groupsRequests.remove(i);
+                                        }          
+                                    }
+                                    chat.groupsList.add(grupo);
+                                    chat.groupsButtons = chat.initButtonsGroups(chat.groupsList);
+                                    chat.groupsRequestButtons = chat.initButtonsGroupsReq(chat.groupsRequests);
+                                    chat.restartButtons();
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                        case "rechazado":{
+                            switch(splitted[1]){
+                                case "amistad":
+                                {
+                                    for (int i = 0; i < chat.friendsRequests.size(); i++)
+                                    {
+                                        if(chat.friendsRequests.get(i).id == Integer.parseInt(splitted[2]))
+                                        {
+                                            chat.friendsRequests.remove(i);
+                                        }          
+                                    }
+                                    chat.friendsRequestsButtons = chat.initButtonsFriendsReq(chat.friendsRequests);
+                                    chat.restartButtons();
+                                    break;
+                                }
+                                case "grupo":{
+                                    for (int i = 0; i < chat.groupsRequests.size(); i++)
+                                    {
+                                        if(chat.groupsRequests.get(i).id == Integer.parseInt(splitted[2]))
+                                        {
+                                            chat.groupsRequests.remove(i);
+                                        }          
+                                    }
+                                    chat.groupsRequestButtons = chat.initButtonsGroupsReq(chat.groupsRequests);
+                                    chat.restartButtons();
+                                    break;
+                                }
+                            }
+                            break;
+                        }
                     }
                     if(chat.last == 1)
                     {

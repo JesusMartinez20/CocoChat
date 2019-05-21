@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
 import javax.swing.JButton;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -346,11 +347,28 @@ public class Chat extends JFrame implements Runnable{
             botones[i] = new JButton( groupsReqList.get(i).nombre);
             botones[i].addActionListener((ActionEvent e) ->
             {
-                System.out.println("hola");
+                groupReqOption(id);
             });
 
         }
         return botones;
+    }
+    
+    public void groupReqOption(int i)
+    {
+        ImageIcon icon = new ImageIcon("src/cocochat/turtle.jpeg");
+        String[] options = new String[] {"Aceptar", "Rechazar", "Cancelar"};
+        int response = JOptionPane.showOptionDialog(null, "", "Solicitud de Grupo",
+        JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+        icon, options, options[0]);
+        if(response == 0)
+        {
+            os.print("aceptar<s>grupo<s>"+groupsRequests.get(i).id);
+        }
+        else if (response == 1)
+        {
+            os.print("rechazar<s>grupo<s>"+groupsRequests.get(i).id);
+        }
     }
     
     public JButton[] initButtonsFriendsReq(ArrayList<Solicitudes_Amigos> friendsReqList){
@@ -361,11 +379,28 @@ public class Chat extends JFrame implements Runnable{
             botones[i] = new JButton( friendsReqList.get(i).nombre);
             botones[i].addActionListener((ActionEvent e) ->
             {
-                System.out.println("hola");
+                friendReqOption(id);
             });
 
         }
         return botones;
+    }
+    
+    private void friendReqOption(int i)
+    {
+        ImageIcon icon = new ImageIcon("src/cocochat/turtle.jpeg");
+        String[] options = new String[] {"Aceptar", "Rechazar", "Cancelar"};
+        int response = JOptionPane.showOptionDialog(null, "", "Solicitud de Amistad",
+        JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+        icon, options, options[0]);
+        if(response == 0)
+        {
+            os.print("aceptar<s>amigo<s>"+friendsRequests.get(i).id);
+        }
+        else if (response == 1)
+        {
+            os.print("rechazar<s>amigo<s>"+friendsRequests.get(i).id);
+        }
     }
     
     public void showMensajesGrupo(int id)
@@ -387,7 +422,7 @@ public class Chat extends JFrame implements Runnable{
             chatPanel.setText(chatPanel.getText()+grupo.mensajes.get(i).tiempo+"\n");
         }
         last = 2;
-        friend = id;
+        group = id;
     }
 
     public void friendsList(){
