@@ -39,7 +39,7 @@ import org.xml.sax.InputSource;
  *
  * @author Jesús Martínez
  */
-public class Chat extends JFrame implements ActionListener, Runnable{
+public class Chat extends JFrame implements Runnable{
 
 
    int nFriends=2, nGroups=2, nOnline=2, nOffline=2;
@@ -65,6 +65,7 @@ public class Chat extends JFrame implements ActionListener, Runnable{
    int last = 0,friend = 0, group = 0;
 
    JButton send=new JButton("Enviar");
+   JButton botonPanel = new JButton("");
 
 
    Socket clientSocket = null;
@@ -139,6 +140,10 @@ public class Chat extends JFrame implements ActionListener, Runnable{
             {
                 sendNudes();
             });
+        botonPanel.addActionListener((ActionEvent e) ->
+            {
+                varButton();
+            });
 
         GroupLayout view= new GroupLayout(this.getContentPane());
 
@@ -148,7 +153,10 @@ public class Chat extends JFrame implements ActionListener, Runnable{
                     .addGroup(view.createSequentialGroup()
                             .addComponent(scrollSide,200,200,200)
                             .addGroup(view.createParallelGroup()
-                                    .addComponent(description,500,500,500)
+                                    .addGroup(view.createSequentialGroup()
+                                            .addComponent(description,400,400,400)
+                                            .addComponent(botonPanel,100,100,100)
+                                    )
                                     .addComponent(scrollChat,500,500,500)
                                     .addGroup(view.createSequentialGroup()
                                             .addComponent(message,400,400,400)
@@ -165,7 +173,10 @@ public class Chat extends JFrame implements ActionListener, Runnable{
                     .addGroup(view.createParallelGroup()
                             .addComponent(scrollSide)
                             .addGroup(view.createSequentialGroup()
-                                    .addComponent(description,50,50,50)
+                                    .addGroup(view.createParallelGroup()
+                                            .addComponent(description,50,50,50)
+                                            .addComponent(botonPanel,50,50,50)
+                                    )
                                     .addComponent(scrollChat)
                                     .addGroup(view.createParallelGroup()
                                             .addComponent(message,50,50,50)
@@ -214,7 +225,24 @@ public class Chat extends JFrame implements ActionListener, Runnable{
         }
     }
     
-   public void initSide(JTextField label, JButton[] buttons){
+    public void varButton()
+    {
+        if(last==1){
+                String input = JOptionPane.showInputDialog(null,"Cambiar alias");
+                friendsList.get(friend).alias = input;
+                friendsButtons = initButtonsFriends(friendsList);
+                restartButtons();
+                os.print("alias<s>"+friendsList.get(friend).id+"<s>"+input);
+            }else if(last==2){
+                String input = JOptionPane.showInputDialog(null,"Agregar personas");
+            }else if(last==3){
+                System.out.println("hola");
+            }else{
+                System.out.println("alv me vale verga");
+            }
+    }
+    
+    public void initSide(JTextField label, JButton[] buttons){
         y+=50;
         label.setBounds(0,y,200, 50);
         list.add(label);
@@ -245,6 +273,7 @@ public class Chat extends JFrame implements ActionListener, Runnable{
 
     public void showMensajesAmigo(int id)
     {
+        botonPanel.setText("Alias");
         chatPanel.setText("");
         Amigo amigo = friendsList.get(id);
         for(int i = 0; i < amigo.mensajes.size(); i++)
@@ -341,6 +370,7 @@ public class Chat extends JFrame implements ActionListener, Runnable{
     
     public void showMensajesGrupo(int id)
     {
+        botonPanel.setText("Nuevo");
         chatPanel.setText("");
         Grupo grupo = groupsList.get(id);
         for(int i = 0; i < grupo.mensajes.size(); i++)
@@ -547,24 +577,6 @@ public class Chat extends JFrame implements ActionListener, Runnable{
             }
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e){
-        if(e.getSource()==send){
-           sendMessage();
-        }
-    }
-
-    public void sendMessage(){
-        try
-            {
-                os.print("message"+"<s>"+this.message.getText()+"<s>"+this.destination);
-                while(clientSocket.getInputStream().available()==0);
-                   //this.requestList=new byte[clientSocket.getInputStream().available()];
-            } catch (IOException ex) {
-                Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
-            }
-    }
-
     private static Document convertStringToXMLDocument(String xmlString)
     {
         //Parser that produces DOM object trees from XML content
@@ -586,6 +598,21 @@ public class Chat extends JFrame implements ActionListener, Runnable{
             e.printStackTrace();
         }
         return null;
+    }
+    
+    public void restartButtons()
+    {
+        y = 0;
+        list.removeAll();
+        initSide(friendsReq, friendsRequestsButtons);
+        initSide(groupsReq, groupsRequestButtons);
+        initSide(friends,friendsButtons);
+        initSide(groups,groupsButtons);
+        initSide(online,onlineButtons);
+        initSide(offline,offlineButtons);
+        list.setPreferredSize(new Dimension(300,1000));
+        scrollSide.setViewportView(list);
+        y += 50;
     }
 
     @Override

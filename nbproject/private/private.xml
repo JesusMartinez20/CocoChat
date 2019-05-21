@@ -3,9 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/lghhs/Documents/NetBeansProjects/CocoChat/src/cocochat/Chat.java</file>
+            <file>file:/C:/Users/lghhs/Documents/NetBeansProjects/CocoChat/src/cocochat/Amigo.java</file>
             <file>file:/C:/Users/lghhs/Documents/NetBeansProjects/CocoChat/src/cocochat/CocoChat.java</file>
+            <file>file:/C:/Users/lghhs/Documents/NetBeansProjects/CocoChat/src/cocochat/Online.java</file>
+            <file>file:/C:/Users/lghhs/Documents/NetBeansProjects/CocoChat/src/cocochat/Sign_in.java</file>
             <file>file:/C:/Users/lghhs/Documents/NetBeansProjects/CocoChat/src/cocochat/ListenThread.java</file>
+            <file>file:/C:/Users/lghhs/Documents/NetBeansProjects/CocoChat/src/cocochat/Offline.java</file>
             <file>file:/C:/Users/lghhs/Documents/NetBeansProjects/CocoChat/src/cocochat/Log_in.java</file>
         </group>
     </open-files>

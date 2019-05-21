@@ -96,7 +96,6 @@ public class ListenThread extends Thread{
                             break;
                         }
                         case "online":{
-                            chat.y = 0;
                             Online online = new Online();
                             online.id = Integer.parseInt(splitted[1]);
                             online.name = splitted[2];
@@ -110,16 +109,7 @@ public class ListenThread extends Thread{
                             }
                             chat.onlineButtons = chat.initButtonsOnline(chat.onlineList);
                             chat.offlineButtons = chat.initButtonsOffline(chat.offlineList);
-                            chat.list.removeAll();
-                            chat.initSide(chat.friendsReq, chat.friendsRequestsButtons);
-                            chat.initSide(chat.groupsReq, chat.groupsRequestButtons);
-                            chat.initSide(chat.friends,chat.friendsButtons);
-                            chat.initSide(chat.groups,chat.groupsButtons);
-                            chat.initSide(chat.online,chat.onlineButtons);
-                            chat.initSide(chat.offline,chat.offlineButtons);
-                            chat.list.setPreferredSize(new Dimension(300,1000));
-                            chat.scrollSide.setViewportView(chat.list);
-                            chat.y += 50;
+                            chat.restartButtons();
                             break;
                         }
                     }
