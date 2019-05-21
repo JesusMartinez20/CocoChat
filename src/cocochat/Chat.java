@@ -63,7 +63,7 @@ public class Chat extends JFrame implements Runnable{
    JTextField message=new JTextField();
    JTextField groupsReq = new JTextField();
    JTextField friendsReq = new JTextField();
-   int last = 0,friend = 0, group = 0;
+   int last = 0,friend = 0, group = 0, nofriend = 0;
 
    JButton send=new JButton("Enviar");
    JButton botonPanel = new JButton("");
@@ -206,11 +206,15 @@ public class Chat extends JFrame implements Runnable{
             long time = date.getTime();
             Timestamp ts = new Timestamp(time);
             mensaje.tiempo = ts.toString();
+            if(friendsList.get(friend).mensajes == null)
+            {
+                friendsList.get(friend).mensajes = new ArrayList<Mensaje>();
+            }
             friendsList.get(friend).mensajes.add(mensaje);
             showMensajesAmigo(friend);
             message.setText("");
         }
-        else
+        else if(last == 2)
         {
             os.print("mensaje<s>grupo<s>"+groupsList.get(group).id+"<s>"+message.getText());
             Mensaje mensaje = new Mensaje();
@@ -220,8 +224,30 @@ public class Chat extends JFrame implements Runnable{
             long time = date.getTime();
             Timestamp ts = new Timestamp(time);
             mensaje.tiempo = ts.toString();
+            if(groupsList.get(group).mensajes == null)
+            {
+                groupsList.get(group).mensajes = new ArrayList<Mensaje>();
+            }
             groupsList.get(group).mensajes.add(mensaje);
             showMensajesGrupo(group);
+            message.setText("");
+        }
+        else if (last == 3)
+        {
+            os.print("mensaje<s>noamigo<s>"+onlineList.get(nofriend).id+"<s>"+message.getText());
+            Mensaje mensaje = new Mensaje();
+            mensaje.origen = "0";
+            mensaje.texto = message.getText();
+            Date date= new Date();
+            long time = date.getTime();
+            Timestamp ts = new Timestamp(time);
+            mensaje.tiempo = ts.toString();
+            if(onlineList.get(nofriend).mensajes == null)
+            {
+               onlineList.get(nofriend).mensajes = new ArrayList<Mensaje>(); 
+            }
+            onlineList.get(nofriend).mensajes.add(mensaje);
+            showMessagesOnline(nofriend);
             message.setText("");
         }
     }
@@ -278,18 +304,21 @@ public class Chat extends JFrame implements Runnable{
         botonPanel.setText("Alias");
         chatPanel.setText("");
         Amigo amigo = friendsList.get(id);
-        for(int i = 0; i < amigo.mensajes.size(); i++)
+        if(amigo.mensajes != null)
         {
-            if(amigo.mensajes.get(i).origen.equals("0"))
+            for(int i = 0; i < amigo.mensajes.size(); i++)
             {
-                chatPanel.setText(chatPanel.getText()+"\nYo:\n");
+                if(amigo.mensajes.get(i).origen.equals("0"))
+                {
+                    chatPanel.setText(chatPanel.getText()+"\nYo:\n");
+                }
+                else
+                {
+                    chatPanel.setText(chatPanel.getText()+"\n"+amigo.alias+":\n");
+                }
+                chatPanel.setText(chatPanel.getText()+amigo.mensajes.get(i).texto+"\n");
+                chatPanel.setText(chatPanel.getText()+amigo.mensajes.get(i).tiempo+"\n");
             }
-            else
-            {
-                chatPanel.setText(chatPanel.getText()+"\n"+amigo.alias+":\n");
-            }
-            chatPanel.setText(chatPanel.getText()+amigo.mensajes.get(i).texto+"\n");
-            chatPanel.setText(chatPanel.getText()+amigo.mensajes.get(i).tiempo+"\n");
         }
         last = 1;
         friend = id;
@@ -318,11 +347,36 @@ public class Chat extends JFrame implements Runnable{
             botones[i] = new JButton( onlineList.get(i).name);
             botones[i].addActionListener((ActionEvent e) ->
             {
-                System.out.println("hola");
+                showMessagesOnline(id);
             });
 
         }
         return botones;
+    }
+    
+    public void showMessagesOnline(int id)
+    {
+        botonPanel.setText("Amigo");
+        chatPanel.setText("");
+        Online online = onlineList.get(id);
+        last = 3;
+        nofriend = id;
+        if(online.mensajes != null)
+        {
+            for(int i = 0; i < online.mensajes.size(); i++)
+            {
+                if(online.mensajes.get(i).origen.equals("0"))
+                {
+                    chatPanel.setText(chatPanel.getText()+"\nYo:\n");
+                }
+                else
+                {
+                    chatPanel.setText(chatPanel.getText()+"\n"+online.name+":\n");
+                }
+                chatPanel.setText(chatPanel.getText()+online.mensajes.get(i).texto+"\n");
+                chatPanel.setText(chatPanel.getText()+online.mensajes.get(i).tiempo+"\n");
+            }
+        }
     }
     
     public JButton[] initButtonsOffline(ArrayList<Offline> offlineList){
@@ -409,18 +463,21 @@ public class Chat extends JFrame implements Runnable{
         botonPanel.setText("Nuevo");
         chatPanel.setText("");
         Grupo grupo = groupsList.get(id);
-        for(int i = 0; i < grupo.mensajes.size(); i++)
+        if (grupo.mensajes != null)
         {
-            if(grupo.mensajes.get(i).origen.equals("0"))
+            for(int i = 0; i < grupo.mensajes.size(); i++)
             {
-                chatPanel.setText(chatPanel.getText()+"\nYo:\n");
+                if(grupo.mensajes.get(i).origen.equals("0"))
+                {
+                    chatPanel.setText(chatPanel.getText()+"\nYo:\n");
+                }
+                else
+                {
+                    chatPanel.setText(chatPanel.getText()+"\n"+grupo.mensajes.get(i).origen+":\n");
+                }
+                chatPanel.setText(chatPanel.getText()+grupo.mensajes.get(i).texto+"\n");
+                chatPanel.setText(chatPanel.getText()+grupo.mensajes.get(i).tiempo+"\n");
             }
-            else
-            {
-                chatPanel.setText(chatPanel.getText()+"\n"+grupo.mensajes.get(i).origen+":\n");
-            }
-            chatPanel.setText(chatPanel.getText()+grupo.mensajes.get(i).texto+"\n");
-            chatPanel.setText(chatPanel.getText()+grupo.mensajes.get(i).tiempo+"\n");
         }
         last = 2;
         group = id;

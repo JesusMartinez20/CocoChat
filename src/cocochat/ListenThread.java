@@ -8,7 +8,9 @@ package cocochat;
 import java.awt.Dimension;
 import java.io.IOException;
 import java.net.Socket;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -60,6 +62,10 @@ public class ListenThread extends Thread{
                                             mensaje.origen = amigo.alias;
                                             mensaje.texto = splitted[3];
                                             mensaje.tiempo = splitted[4];
+                                            if(amigo.mensajes == null)
+                                            {
+                                                amigo.mensajes = new ArrayList<Mensaje>();
+                                            }
                                             amigo.mensajes.add(mensaje);
                                         }
                                     }
@@ -76,7 +82,34 @@ public class ListenThread extends Thread{
                                             mensaje.origen = splitted[3];
                                             mensaje.texto = splitted[4];
                                             mensaje.tiempo = splitted[5];
+                                            if(grupo.mensajes == null)
+                                            {
+                                                grupo.mensajes = new ArrayList<Mensaje>();
+                                            }
                                             grupo.mensajes.add(mensaje);
+                                        }
+                                    }
+                                    break;
+                                }
+                                case "noamigo":{
+                                    for(int i = 0; i < groupsList.size(); i++)
+                                    {
+                                        Online online = new Online();
+                                        online = chat.onlineList.get(i);
+                                        if(Integer.parseInt(splitted[2]) == online.id)
+                                        {
+                                            Mensaje mensaje = new Mensaje();
+                                            mensaje.origen = online.name;
+                                            mensaje.texto = splitted[3];
+                                            Date date= new Date();
+                                            long time = date.getTime();
+                                            Timestamp ts = new Timestamp(time);
+                                            mensaje.tiempo = ts.toString();
+                                            if(online.mensajes == null)
+                                            {
+                                                online.mensajes = new ArrayList<Mensaje>();
+                                            }
+                                            online.mensajes.add(mensaje);
                                         }
                                     }
                                     break;
@@ -189,8 +222,13 @@ public class ListenThread extends Thread{
                             }
                             break;
                         }
+                        case "encontrado":{
+                            JOptionPane.showMessageDialog(chat, "Solicitud mandada");
+                            break;
+                        }
                         case "noencontrado":{
                             JOptionPane.showMessageDialog(chat, "Usuario no encontrado");
+                            break;
                         }
                     }
                     if(chat.last == 1)
