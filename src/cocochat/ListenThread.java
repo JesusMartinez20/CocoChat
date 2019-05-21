@@ -121,6 +121,12 @@ public class ListenThread extends Thread{
                             switch(splitted[1]){
                                 case "amistad":
                                 {
+                                    Solicitudes_Amigos solicitud = new Solicitudes_Amigos();
+                                    solicitud.id = Integer.parseInt(splitted[2]);
+                                    solicitud.nombre = splitted[3];
+                                    chat.friendsRequests.add(solicitud);
+                                    chat.friendsRequestsButtons = chat.initButtonsFriendsReq(chat.friendsRequests);
+                                    chat.restartButtons();
                                     break;
                                 }
                                 case "grupo":{
@@ -131,6 +137,14 @@ public class ListenThread extends Thread{
                                     chat.groupsRequestButtons = chat.initButtonsGroupsReq(chat.groupsRequests);
                                     chat.restartButtons();
                                     break;
+                                }
+                                case "amigoaceptada":{
+                                    Amigo amigo = new Amigo();
+                                    amigo.id = Integer.parseInt(splitted[2]);
+                                    amigo.alias = splitted[3];
+                                    chat.friendsList.add(amigo);
+                                    chat.friendsButtons = chat.initButtonsFriends(chat.friendsList);
+                                    chat.restartButtons();
                                 }
                             }
                             break;
@@ -238,6 +252,10 @@ public class ListenThread extends Thread{
                     else if(chat.last == 2)
                     {
                         chat.showMensajesGrupo(chat.group);
+                    }
+                    else if(chat.last == 3)
+                    {
+                        chat.showMessagesOnline(chat.nofriend);
                     }
                 }
         } catch (IOException ex) {

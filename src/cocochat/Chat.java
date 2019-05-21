@@ -63,7 +63,7 @@ public class Chat extends JFrame implements Runnable{
    JTextField message=new JTextField();
    JTextField groupsReq = new JTextField();
    JTextField friendsReq = new JTextField();
-   int last = 0,friend = 0, group = 0, nofriend = 0;
+   int last = 0,friend = 0, group = 0, nofriend = 0, nofriendoff = 0;
 
    JButton send=new JButton("Enviar");
    JButton botonPanel = new JButton("");
@@ -264,9 +264,9 @@ public class Chat extends JFrame implements Runnable{
                 String input = JOptionPane.showInputDialog(null,"Invitar amigo");
                 os.print("solicitud<s>grupo<s>"+groupsList.get(group).id+"<s>"+input);
             }else if(last==3){
-                System.out.println("hola");
-            }else{
-                System.out.println("alv me vale verga");
+                os.print("solicitud<s>amigo<s>"+onlineList.get(nofriend).id);
+            }else if (last == 4){
+                os.print("solicitud<s>amigo<s>"+offlineList.get(nofriendoff).id);
             }
     }
     
@@ -301,6 +301,8 @@ public class Chat extends JFrame implements Runnable{
 
     public void showMensajesAmigo(int id)
     {
+        chatPanel.setVisible(true);
+        send.setVisible(true);
         botonPanel.setText("Alias");
         chatPanel.setText("");
         Amigo amigo = friendsList.get(id);
@@ -356,6 +358,8 @@ public class Chat extends JFrame implements Runnable{
     
     public void showMessagesOnline(int id)
     {
+        chatPanel.setVisible(true);
+        send.setVisible(true);
         botonPanel.setText("Amigo");
         chatPanel.setText("");
         Online online = onlineList.get(id);
@@ -387,11 +391,21 @@ public class Chat extends JFrame implements Runnable{
             botones[i] = new JButton( offlineList.get(i).name);
             botones[i].addActionListener((ActionEvent e) ->
             {
-                System.out.println("hola");
+                showOffline(id);
             });
 
         }
         return botones;
+    }
+    
+    public void showOffline(int id)
+    {
+        botonPanel.setText("Amigo");
+        chatPanel.setVisible(false);
+        chatPanel.setText("");
+        send.setVisible(false);
+        last = 4;
+        nofriendoff = id;
     }
     
     public JButton[] initButtonsGroupsReq(ArrayList<Solicitudes_Grupos> groupsReqList){
@@ -460,6 +474,8 @@ public class Chat extends JFrame implements Runnable{
     
     public void showMensajesGrupo(int id)
     {
+        chatPanel.setVisible(true);
+        send.setVisible(true);
         botonPanel.setText("Nuevo");
         chatPanel.setText("");
         Grupo grupo = groupsList.get(id);
