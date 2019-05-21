@@ -15,11 +15,10 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Jesús Martínez
+ * @author lghhs
  */
-public class CocoChat 
+public class CocoChat
 {
-
     /**
      * @param args the command line arguments
      */

@@ -88,12 +88,18 @@ public class Log_in extends JFrame implements ActionListener{
                     }
                     else
                     {
-                        new Chat(clientSocket, os).setVisible(true);
+                        Chat chat = new Chat(clientSocket, os);
+                        chat.setVisible(true);
+                        Thread t = new Thread(chat);
+                        t.start();
+                        ListenThread listen = new ListenThread(this.clientSocket, chat.friendsList, chat.groupsList, chat);
+                        listen.start();
                         this.dispose();
                     }
                     if(retries == 3)
                     {
-                        new Sign_in(clientSocket,os).setVisible(true);  
+                        new Sign_in(clientSocket,os).setVisible(true); 
+                        this.dispose();
                     }
             } catch (IOException ex) {
                 Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
