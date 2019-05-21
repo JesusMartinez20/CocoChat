@@ -455,6 +455,11 @@ public class Chat extends JFrame implements Runnable{
         nofriendoff = id;
     }
     
+    /**
+     * 
+     * @param groupsReqList
+     * @return 
+     */
     public JButton[] initButtonsGroupsReq(ArrayList<Solicitudes_Grupos> groupsReqList){
         JButton [] botones = new JButton[groupsReqList.size()];
         for (int i = 0; i < groupsReqList.size(); i++)
