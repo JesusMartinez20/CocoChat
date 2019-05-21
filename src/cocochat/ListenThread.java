@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -90,6 +91,12 @@ public class ListenThread extends Thread{
                                     break;
                                 }
                                 case "grupo":{
+                                    Solicitudes_Grupos solicitud = new Solicitudes_Grupos();
+                                    solicitud.id = Integer.parseInt(splitted[2]);
+                                    solicitud.nombre = splitted[3];
+                                    chat.groupsRequests.add(solicitud);
+                                    chat.groupsRequestButtons = chat.initButtonsGroupsReq(chat.groupsRequests);
+                                    chat.restartButtons();
                                     break;
                                 }
                             }
@@ -181,6 +188,9 @@ public class ListenThread extends Thread{
                                 }
                             }
                             break;
+                        }
+                        case "noencontrado":{
+                            JOptionPane.showMessageDialog(chat, "Usuario no encontrado");
                         }
                     }
                     if(chat.last == 1)

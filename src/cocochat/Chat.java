@@ -235,7 +235,8 @@ public class Chat extends JFrame implements Runnable{
                 restartButtons();
                 os.print("alias<s>"+friendsList.get(friend).id+"<s>"+input);
             }else if(last==2){
-                String input = JOptionPane.showInputDialog(null,"Agregar personas");
+                String input = JOptionPane.showInputDialog(null,"Invitar amigo");
+                os.print("solicitud<s>grupo<s>"+groupsList.get(group).id+"<s>"+input);
             }else if(last==3){
                 System.out.println("hola");
             }else{
