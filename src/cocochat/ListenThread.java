@@ -26,7 +26,13 @@ public class ListenThread extends Thread{
     ArrayList<Amigo> friendsList;
     ArrayList<Grupo> groupsList;
     Chat chat;
-    
+    /**
+     * Inicializa el hilo 
+     * @param clientSocket
+     * @param friendsList
+     * @param groupsList
+     * @param chat 
+     */
     public ListenThread(Socket clientSocket, ArrayList<Amigo> friendsList, ArrayList<Grupo> groupsList, Chat chat)
     {
         this.clientSocket = clientSocket;
@@ -36,6 +42,9 @@ public class ListenThread extends Thread{
     }
     
     @Override
+    /**
+     * Recibe la información del server y segun sea el caso la procesa
+     */
     public void run() {
         while(true)
         {
