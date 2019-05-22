@@ -37,6 +37,7 @@ public class Log_in extends JFrame implements ActionListener{
     private int retries;
   
     PrintStream os;
+    
     /**
      * Inicializa el log in 
      * @param clientSocket
@@ -56,7 +57,7 @@ public class Log_in extends JFrame implements ActionListener{
     }
     
    /**
-    * Carga la vista
+    * Carga la vista con sus elementos
     */
     void Elementos(){
         
@@ -83,7 +84,8 @@ public class Log_in extends JFrame implements ActionListener{
 
     @Override
     /**
-     * Hace la validación de os datos y si es correcta, carga el chat y  solo te permite fallar 3 veces, si se excede el limite entonces carga la vista del registro
+     * Hace la validación de los datos y si es correcta, carga el chat y  
+     * solo te permite fallar 3 veces, si se excede el limite entonces carga la vista del registro
      */
     public void actionPerformed(ActionEvent ae) {
         if(ae.getSource()==loginButton){

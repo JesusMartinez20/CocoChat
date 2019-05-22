@@ -27,6 +27,9 @@ public class Grupo {
         this.mensajes=new ArrayList<>();
     }
 
+    /**
+     * Constructor vacío que inicializa la lista de mensajes vacía
+     */
     public Grupo() {
         this.mensajes = new ArrayList<>();
     }  

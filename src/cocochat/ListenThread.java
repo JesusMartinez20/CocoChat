@@ -43,7 +43,10 @@ public class ListenThread extends Thread{
     
     @Override
     /**
-     * Recibe la información del server y segun sea el caso la procesa
+     * Recibe la información del server y segun sea el caso la procesa; puede recibir mensajes de amigos, grupos
+     * y no amigos; recibir una solicitud de amistad o de grupo; actuaizar los usuarios online; las solicitudes aceptadas
+     * y los grupos aceptados actualizados una vez que son aceptados; la eliminación de las solicitudes si son rechazadas
+     * crear un nuevo grupo o eliminarlo
      */
     public void run() {
         while(true)

@@ -40,6 +40,7 @@ public class Sign_in extends JFrame implements ActionListener{
    
    int x=300;
    int y=105;
+   
     /**
      * inicializa el sign up
      * @param clientSocket
@@ -51,8 +52,9 @@ public class Sign_in extends JFrame implements ActionListener{
         this.os=os;
         Start();
     }
+    
     /** 
-     * Carga la vista
+     * Carga la vista y sus componentes
      */
     public final void Start ()
     {
@@ -95,8 +97,7 @@ public class Sign_in extends JFrame implements ActionListener{
    @Override
    /**
     * Hace la validacion de los datos y en caso de que sea correcta, carga el chat
-    */
-   
+    */  
     public void actionPerformed(ActionEvent e) {
         if(!checkPassword(password1.getPassword(),password2.getPassword())){
             JOptionPane.showMessageDialog(null, "Las contraseñas no coinciden");
@@ -133,7 +134,13 @@ public class Sign_in extends JFrame implements ActionListener{
             }
         }
     }
-    
+  
+    /**
+     * Checa que la password sea igual que la de verificación
+     * @param pass1
+     * @param pass2
+     * @return 
+     */
     boolean checkPassword(char[] pass1,char[] pass2){
        return new String(pass1).equals(new String(pass2));
     }

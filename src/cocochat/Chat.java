@@ -89,11 +89,11 @@ public class Chat extends JFrame implements Runnable{
    int y=0;
 
 
-/**
- * Inicializa el chat  y carga la vista
- * @param clientSocket
- * @param os 
- */
+    /**
+     * Inicializa el chat  y carga la vista
+     * @param clientSocket
+     * @param os 
+     */
     Chat(Socket clientSocket,PrintStream os) {
         this.clientSocket = clientSocket;
         this.os = os;
@@ -219,10 +219,10 @@ public class Chat extends JFrame implements Runnable{
         view.setAutoCreateContainerGaps(true);
         view.setAutoCreateGaps(true);
     }
+    
     /**
-     *Manda el mensae escrito por el usuario al server 
+     *Manda el mensaje escrito por el usuario al server 
      */
-
     public void sendNudes()
     {
         if(last == 1)
@@ -284,14 +284,13 @@ public class Chat extends JFrame implements Runnable{
     /**
      * Manda al server el comando para crear un nuevo grupo con el nombre de este 
      */
-    
-    
     public void newGrupo(){
         String input = JOptionPane.showInputDialog(null,"Nombre del grupo");
         os.print("nuevo<s>"+input);
     }
+    
     /**
-     * Manda el comando para eliminar un rupo específico 
+     * Manda el comando para eliminar un grupo específico 
      */
     public void deleteGrupo()
     {
@@ -338,13 +337,12 @@ public class Chat extends JFrame implements Runnable{
                 os.print("solicitud<s>amigo<s>"+offlineList.get(nofriendoff).id);
             }
     }
+    
     /**
      * Inicializa la barra lateral
      * @param label etiqueta a agregar 
      * @param buttons conjunto de botones a agregar 
      */
-    
-    
     public void initSide(JTextField label, JButton[] buttons){
         y+=50;
         label.setBounds(0,y,200, 50);
@@ -357,12 +355,12 @@ public class Chat extends JFrame implements Runnable{
 
         }
     }
+    
     /**
      * Inicializa los botones de la lista de amigos
      * @param friendsList lista de amigos
      * @return conjunto de botones inicializados
      */
-
     public JButton[] initButtonsFriends(ArrayList<Amigo> friendsList){
         JButton [] botones = new JButton[friendsList.size()];
         for (int i = 0; i < friendsList.size(); i++)
@@ -378,10 +376,10 @@ public class Chat extends JFrame implements Runnable{
         return botones;
     }
 
-/**
- * Muestra la lista de mensajes de un amigo
- * @param id id del amigo
- */
+    /**
+     * Muestra la lista de mensajes de un amigo
+     * @param id id del amigo
+     */
     public void showMensajesAmigo(int id)
     {
         chatPanel.setVisible(true);
@@ -408,11 +406,12 @@ public class Chat extends JFrame implements Runnable{
         last = 1;
         friend = id;
     }
-/**
- * Inicializa la lista de botones de grupos
- * @param groupsList lista de grupos
- * @return lista de botones ya inicializados
- */
+    
+    /**
+     * Inicializa la lista de botones de grupos
+     * @param groupsList lista de grupos
+     * @return lista de botones ya inicializados
+     */
     public JButton[] initButtonsGroups(ArrayList<Grupo> groupsList){
         JButton [] botones = new JButton[groupsList.size()];
         for (int i = 0; i < groupsList.size(); i++)
@@ -427,6 +426,7 @@ public class Chat extends JFrame implements Runnable{
         }
         return botones;
     }
+    
     /**
      * Inicializa la lista de botones de usuarios online
      * @param onlineList lista de usuariois online
@@ -446,6 +446,7 @@ public class Chat extends JFrame implements Runnable{
         }
         return botones;
     }
+    
     /**
      * Muestra la lista de mensajes con la persona online
      * @param id id del usuario con el que se esta platicando
@@ -476,6 +477,7 @@ public class Chat extends JFrame implements Runnable{
             }
         }
     }
+    
     /**
      * Inicializa la lista de botones de usuarios offline
      * @param offlineList lista de usuariois offline
@@ -495,8 +497,9 @@ public class Chat extends JFrame implements Runnable{
         }
         return botones;
     }
+    
     /**
-     *Cambia los aspectos del chat si se abre un hat de una persona offline
+     *Cambia los aspectos del chat si se abre un chat de una persona offline
      * @param id id de la persona offline
      */
     public void showOffline(int id)
@@ -530,7 +533,8 @@ public class Chat extends JFrame implements Runnable{
     }
     
     /**
-     * Abre un pop up en caso de que se presione una soicitud para unirse un grupo 
+     * Abre un pop up en caso de que se presione una solicitud para unirse un grupo 
+     * y muestra las opciones para aceptarlo o rechazarlo
      * @param i id de la solicitud
      */
     public void groupReqOption(int i)
@@ -569,8 +573,10 @@ public class Chat extends JFrame implements Runnable{
         }
         return botones;
     }
+    
     /**
      * Abre un pop up en caso de que se presione una soicitud para establecer una amistad 
+     * y muestra las opciones para aceptarlo o rechazarlo
      * @param i id de la solicitud
      */
     private void friendReqOption(int i)
@@ -589,6 +595,7 @@ public class Chat extends JFrame implements Runnable{
             os.print("rechazar<s>amigo<s>"+friendsRequests.get(i).id);
         }
     }
+    
     /**
      * Muestra los mensajes de un grupo
      * @param id id del grupp
@@ -619,9 +626,11 @@ public class Chat extends JFrame implements Runnable{
         last = 2;
         group = id;
     }
-/**
- * Recibe la lista de amigos del usuario
- */
+    
+    /**
+     * Envía un comando al servidor para pedir la lista de amigos del usuario
+     * y la recibe para guardarla posteriormente
+     */
     public void friendsList(){
             byte[] bytes;
             String command="";
@@ -658,9 +667,11 @@ public class Chat extends JFrame implements Runnable{
                 Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
             }
     }
-/**
- * Recibe la lista de grupos a la que el usuario pertenece
- */
+    
+    /**
+     * Envía un comando al servidor para pedir la lista de grupos del usuario
+     * y la recibe para guardarla posteriormente
+     */
     public void groupsList(){
             byte[] bytes;
             String command="";
@@ -699,7 +710,8 @@ public class Chat extends JFrame implements Runnable{
     }
     
     /**
-     * Recibe la lista de solicitudes de grupos
+     * Envía un comando al servidor para pedir la lista de solicitudes a grupos del usuario
+     * y la recibe para guardarla posteriormente
      */
     public void groupsRequests(){
             byte[] bytes;
@@ -728,8 +740,10 @@ public class Chat extends JFrame implements Runnable{
                 Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
             }
     }
+    
     /**
-     * Recibe la lista de solicitudes de amistad
+     * Envía un comando al servidor para pedir la lista de solicitudes de amistad del usuario
+     * y la recibe para guardarla posteriormente
      */
     public void friendsRequests(){
             byte[] bytes;
@@ -760,7 +774,8 @@ public class Chat extends JFrame implements Runnable{
     }
 
     /**
-     * Recibe la lista de personas online
+     * Envía un comando al servidor para pedir la lista de usuarios online
+     * y la recibe para guardarla posteriormente
      */
     public void onlineList(){
         byte[] bytes;
@@ -789,9 +804,11 @@ public class Chat extends JFrame implements Runnable{
                 Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
             }
     }
-/**
- * Recibe la lista de personas offline
- */
+    
+    /**
+     * Envía un comando al servidor para pedir la lista de usuarios offline
+     * y la recibe para guardarla posteriormente
+     */
     public void offlineList(){
         byte[] bytes;
             String command="";
@@ -820,6 +837,11 @@ public class Chat extends JFrame implements Runnable{
             }
     }
 
+    /**
+     * Traduce un String a un XML
+     * @param xmlString
+     * @return 
+     */
     private static Document convertStringToXMLDocument(String xmlString)
     {
         //Parser that produces DOM object trees from XML content
@@ -842,6 +864,7 @@ public class Chat extends JFrame implements Runnable{
         }
         return null;
     }
+    
     /**
      * Actualiza la barra lateral del chat
      */
