@@ -18,11 +18,19 @@ public class Solicitudes_Grupos {
     int id;
     String nombre;
 
+    /**
+     * Constructor que asigna el id y el nombre del grupo
+     * @param id
+     * @param nombre
+     */
     public Solicitudes_Grupos(int id, String nombre) {
         this.id = id;
         this.nombre = nombre;
     }
 
+    /**
+     * Constructor vacío que instancia la clase
+     */
     public Solicitudes_Grupos() {
     }  
 }

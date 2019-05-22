@@ -13,11 +13,20 @@ public class Solicitudes_Amigos {
     int id;
     String nombre;
 
+
+    /**
+     * Constructor que asigna el id y el nombre del amigo
+     * @param id
+     * @param nombre
+     */
     public Solicitudes_Amigos(int id, String nombre) {
         this.id = id;
         this.nombre = nombre;
     }
 
+    /**
+     * Constructor vacío que instancia la clase
+     */
     public Solicitudes_Amigos() {
     }  
 }

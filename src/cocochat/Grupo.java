@@ -16,6 +16,11 @@ public class Grupo {
     String nombre;
     ArrayList<Mensaje> mensajes;
 
+    /**
+     * Constructor que recibe los parametros necesarios para crear un grupo
+     * @param id
+     * @param nombre
+     */
     public Grupo(int id, String nombre) {
         this.id = id;
         this.nombre = nombre;

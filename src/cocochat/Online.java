@@ -16,7 +16,10 @@ public class Online {
   String name;
   int id;
   ArrayList<Mensaje> mensajes;
-  
+
+  /**
+   * Constructor vacío que instancia la clase Online
+   */
   Online(){
       
   }

@@ -15,7 +15,11 @@ public class Offline {
     String name;
     int id;
     ArrayList<Mensaje> mensajes;
-    
+
+
+    /**
+     * Constructor vacío que instancia la clase Offline
+     */
     Offline(){
         
     }
