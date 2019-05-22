@@ -89,7 +89,11 @@ public class Chat extends JFrame implements Runnable{
    int y=0;
 
 
-
+/**
+ * Inicializa el chat  y carga la vista
+ * @param clientSocket
+ * @param os 
+ */
     Chat(Socket clientSocket,PrintStream os) {
         this.clientSocket = clientSocket;
         this.os = os;
@@ -215,6 +219,9 @@ public class Chat extends JFrame implements Runnable{
         view.setAutoCreateContainerGaps(true);
         view.setAutoCreateGaps(true);
     }
+    /**
+     *Manda el mensae escrito por el usuario al server 
+     */
 
     public void sendNudes()
     {
@@ -274,11 +281,18 @@ public class Chat extends JFrame implements Runnable{
         }
     }
     
+    /**
+     * Manda al server el comando para crear un nuevo grupo con el nombre de este 
+     */
+    
+    
     public void newGrupo(){
         String input = JOptionPane.showInputDialog(null,"Nombre del grupo");
         os.print("nuevo<s>"+input);
     }
-    
+    /**
+     * Manda el comando para eliminar un rupo específico 
+     */
     public void deleteGrupo()
     {
         os.print("eliminar<s>grupo<s>"+groupsList.get(group).id);
@@ -293,12 +307,20 @@ public class Chat extends JFrame implements Runnable{
                                     restartButtons();
     }
     
+    /**
+     * Manda el comando para borrar a una persona especifica de un grupo 
+     */
     public void deletePersona()
     {
         String input = JOptionPane.showInputDialog(null,"Nombre de la persona a eliminar");
         os.print("eliminar<s>persona<s>"+input+"<s>"+groupsList.get(group).id);
     }
     
+    /**
+     *Ejecuta la opcion correspondiente segun la vista que se este cargando, cambia de alias si es un amigo,
+     * invita  a un amigo si esta en un grupo 
+     * y le manda solicitud a un usuario ya sea que este offline u online
+     */
     public void varButton()
     {
         if(last==1){
@@ -316,6 +338,12 @@ public class Chat extends JFrame implements Runnable{
                 os.print("solicitud<s>amigo<s>"+offlineList.get(nofriendoff).id);
             }
     }
+    /**
+     * Inicializa la barra lateral
+     * @param label etiqueta a agregar 
+     * @param buttons conjunto de botones a agregar 
+     */
+    
     
     public void initSide(JTextField label, JButton[] buttons){
         y+=50;
@@ -329,6 +357,11 @@ public class Chat extends JFrame implements Runnable{
 
         }
     }
+    /**
+     * Inicializa los botones de la lista de amigos
+     * @param friendsList lista de amigos
+     * @return conjunto de botones inicializados
+     */
 
     public JButton[] initButtonsFriends(ArrayList<Amigo> friendsList){
         JButton [] botones = new JButton[friendsList.size()];
@@ -345,7 +378,10 @@ public class Chat extends JFrame implements Runnable{
         return botones;
     }
 
-
+/**
+ * Muestra la lista de mensajes de un amigo
+ * @param id id del amigo
+ */
     public void showMensajesAmigo(int id)
     {
         chatPanel.setVisible(true);
@@ -372,7 +408,11 @@ public class Chat extends JFrame implements Runnable{
         last = 1;
         friend = id;
     }
-
+/**
+ * Inicializa la lista de botones de grupos
+ * @param groupsList lista de grupos
+ * @return lista de botones ya inicializados
+ */
     public JButton[] initButtonsGroups(ArrayList<Grupo> groupsList){
         JButton [] botones = new JButton[groupsList.size()];
         for (int i = 0; i < groupsList.size(); i++)
@@ -387,7 +427,11 @@ public class Chat extends JFrame implements Runnable{
         }
         return botones;
     }
-    
+    /**
+     * Inicializa la lista de botones de usuarios online
+     * @param onlineList lista de usuariois online
+     * @return lista de botones ya inicializadoss
+     */
     public JButton[] initButtonsOnline(ArrayList<Online> onlineList){
         JButton [] botones = new JButton[onlineList.size()];
         for (int i = 0; i < onlineList.size(); i++)
@@ -402,7 +446,10 @@ public class Chat extends JFrame implements Runnable{
         }
         return botones;
     }
-    
+    /**
+     * Muestra la lista de mensajes con la persona online
+     * @param id id del usuario con el que se esta platicando
+     */
     public void showMessagesOnline(int id)
     {
         chatPanel.setVisible(true);
@@ -429,7 +476,11 @@ public class Chat extends JFrame implements Runnable{
             }
         }
     }
-    
+    /**
+     * Inicializa la lista de botones de usuarios offline
+     * @param offlineList lista de usuariois offline
+     * @return lista de botones ya inicializadoss
+     */
     public JButton[] initButtonsOffline(ArrayList<Offline> offlineList){
         JButton [] botones = new JButton[offlineList.size()];
         for (int i = 0; i < offlineList.size(); i++)
@@ -444,7 +495,10 @@ public class Chat extends JFrame implements Runnable{
         }
         return botones;
     }
-    
+    /**
+     *Cambia los aspectos del chat si se abre un hat de una persona offline
+     * @param id id de la persona offline
+     */
     public void showOffline(int id)
     {
         botonPanel.setText("Amigo");
@@ -455,6 +509,11 @@ public class Chat extends JFrame implements Runnable{
         nofriendoff = id;
     }
     
+    /**
+     * Inicializa la lista de botones solicitudes de grupo
+     * @param groupsReqList lista de soicitdes de grupo
+     * @return lista de botones ya inicializados
+     */
     public JButton[] initButtonsGroupsReq(ArrayList<Solicitudes_Grupos> groupsReqList){
         JButton [] botones = new JButton[groupsReqList.size()];
         for (int i = 0; i < groupsReqList.size(); i++)
@@ -470,6 +529,10 @@ public class Chat extends JFrame implements Runnable{
         return botones;
     }
     
+    /**
+     * Abre un pop up en caso de que se presione una soicitud para unirse un grupo 
+     * @param i id de la solicitud
+     */
     public void groupReqOption(int i)
     {
         ImageIcon icon = new ImageIcon("src/cocochat/turtle.jpeg");
@@ -487,6 +550,11 @@ public class Chat extends JFrame implements Runnable{
         }
     }
     
+    /**
+     * Inicializa la lista de botones de las solicitudes de amistad
+     * @param friendsReqList lista de solicitudes
+     * @return lista de botones ya inicializados
+     */
     public JButton[] initButtonsFriendsReq(ArrayList<Solicitudes_Amigos> friendsReqList){
         JButton [] botones = new JButton[friendsReqList.size()];
         for (int i = 0; i < friendsReqList.size(); i++)
@@ -501,7 +569,10 @@ public class Chat extends JFrame implements Runnable{
         }
         return botones;
     }
-    
+    /**
+     * Abre un pop up en caso de que se presione una soicitud para establecer una amistad 
+     * @param i id de la solicitud
+     */
     private void friendReqOption(int i)
     {
         ImageIcon icon = new ImageIcon("src/cocochat/turtle.jpeg");
@@ -518,7 +589,10 @@ public class Chat extends JFrame implements Runnable{
             os.print("rechazar<s>amigo<s>"+friendsRequests.get(i).id);
         }
     }
-    
+    /**
+     * Muestra los mensajes de un grupo
+     * @param id id del grupp
+     */
     public void showMensajesGrupo(int id)
     {
         chatPanel.setVisible(true);
@@ -545,7 +619,9 @@ public class Chat extends JFrame implements Runnable{
         last = 2;
         group = id;
     }
-
+/**
+ * Recibe la lista de amigos del usuario
+ */
     public void friendsList(){
             byte[] bytes;
             String command="";
@@ -582,7 +658,9 @@ public class Chat extends JFrame implements Runnable{
                 Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
             }
     }
-
+/**
+ * Recibe la lista de grupos a la que el usuario pertenece
+ */
     public void groupsList(){
             byte[] bytes;
             String command="";
@@ -620,6 +698,9 @@ public class Chat extends JFrame implements Runnable{
             }
     }
     
+    /**
+     * Recibe la lista de solicitudes de grupos
+     */
     public void groupsRequests(){
             byte[] bytes;
             String command="";
@@ -647,7 +728,9 @@ public class Chat extends JFrame implements Runnable{
                 Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
             }
     }
-    
+    /**
+     * Recibe la lista de solicitudes de amistad
+     */
     public void friendsRequests(){
             byte[] bytes;
             String command="";
@@ -676,7 +759,9 @@ public class Chat extends JFrame implements Runnable{
             }
     }
 
-    
+    /**
+     * Recibe la lista de personas online
+     */
     public void onlineList(){
         byte[] bytes;
             String command="";
@@ -704,7 +789,9 @@ public class Chat extends JFrame implements Runnable{
                 Logger.getLogger(Log_in.class.getName()).log(Level.SEVERE, null, ex);
             }
     }
-
+/**
+ * Recibe la lista de personas offline
+ */
     public void offlineList(){
         byte[] bytes;
             String command="";
@@ -755,7 +842,9 @@ public class Chat extends JFrame implements Runnable{
         }
         return null;
     }
-    
+    /**
+     * Actualiza la barra lateral del chat
+     */
     public void restartButtons()
     {
         y = 0;
@@ -772,6 +861,9 @@ public class Chat extends JFrame implements Runnable{
     }
 
     @Override
+    /**
+     * Ejecuta el hilo 
+     */
     public void run() {
         while(true);
     }
