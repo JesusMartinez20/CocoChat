@@ -15,7 +15,11 @@ public class Amigo {
     int id;
     String alias;
     ArrayList<Mensaje> mensajes;
-
+/**
+ * Constructor que recibe los parametros necesarios para crear un amigo
+ * @param id
+ * @param alias 
+ */
     public Amigo(int id, String alias) {
         this.id = id;
         this.alias = alias;
